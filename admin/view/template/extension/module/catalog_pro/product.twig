@@ -1,0 +1,196 @@
+{{ header }}{{ column_left }}
+
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                    <input type="hidden" name="cmd" value="_s-xclick" />
+                    <input type="hidden" name="hosted_button_id" value="RLFAVE3QJH4HY" />
+                    <input type="image" src="https://www.paypalobjects.com/en_US/RU/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+                    <img alt="" border="0" src="https://www.paypal.com/en_RU/i/scr/pixel.gif" width="1" height="1" />
+                </form>
+            </div>
+            <h1>{{ heading_title }}</h1>
+            <ul class="breadcrumb">
+                {% for breadcrumb in breadcrumbs %}
+                    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {# error list #}
+        {% if error_warning %}
+            <div class="alert alert-danger alert-dismissible">
+                <i class="fa fa-exclamation-circle"></i> {{ error_warning }}!
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% else %}
+            {# success block #}
+            {% if success %}
+                <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>
+            {% endif %}
+
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <table id="list" class="table-striped" style="width: 100%;"></table>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="modal fade" id="editData" role="dialog" aria-labelledby="editDataTitle" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="editDataTitle"></h4>
+                </div>
+                <div class="modal-body" id="editDataContent"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ eLang.buttons.cancel }}</button>
+                    <button type="button" class="btn btn-primary" id="editDataSave">{{ eLang.buttons.save }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="/admin/view/javascript/catalog_pro.js"></script>
+    <script type="text/javascript" src="view/javascript/summernote/summernote.js"></script>
+    <link href="view/javascript/summernote/summernote.css" rel="stylesheet" />
+    <script type="text/javascript" src="view/javascript/summernote/summernote-image-attributes.js"></script>
+    <script type="text/javascript" src="view/javascript/summernote/opencart.js"></script>
+
+    <script>
+      var table;
+      var columns = {{ columns }};
+      var editLink = '{{ edit }}';
+      var saveLink = '{{ save }}';
+      var editDataLink = '{{ edit_data }}';
+      var saveDataLink = '{{ save_data }}';
+      var activeLink = '{{ active }}';
+      var popover;
+      var noimage = '{{ noimage }}';
+
+      $(document).ready(function () {
+
+
+        table = $('#list').DataTable({
+          processing: true,
+          serverSide: true,
+          searching: true,
+          ajax: '{{ data }}',
+          columns: columns,
+          order: [],
+
+          language: {
+            "emptyTable": '{{ datatable.empty_table }}',
+            "info": '{{ datatable.info }}',
+            "infoEmpty": '{{ datatable.info_empty }}',
+            "infoFiltered": '{{ datatable.info_filtered }}',
+            "infoPostFix": '{{ datatable.info_post_fix }}',
+            "thousands": '{{ datatable.thousands }}',
+            "lengthMenu": '{{ datatable.length_menu }}',
+            "loadingRecords": '{{ datatable.loading }}',
+            "processing": '{{ datatable.processing }}',
+            "search": '{{ datatable.search }}',
+            "zeroRecords": '{{ datatable.zero_records }}',
+            "paginate": {
+              "first": '<i class="fa fa-fast-backward" aria-hidden="true"></i>',
+              "last": '<i class="fa fa-fast-forward" aria-hidden="true"></i>',
+              "next": '<i class="fa fa-chevron-right" aria-hidden="true"></i>',
+              "previous": '<i class="fa fa-chevron-left" aria-hidden="true"></i>'
+            },
+            "aria": {
+              "sortAscending": '{{ datatable.sort_asc }}',
+              "sortDescending": '{{ datatable.sort_desc }}'
+            }
+          },
+          iDisplayLength: {{ limit }},
+          createdRow: function (row, data, rowIndex) {
+            $.each($('td', row), function (colIndex) {
+              let c = $(this).attr("class").replace("cell-", "").replace("cell", "").replace("dt-body-left", "").replace("dt-body-right", "").replace("dt-body-center", "").trim();
+              $(this).attr('data-action', c);
+            });
+          },
+          initComplete: function (){
+            let clone = $('#list thead tr').clone();
+            $(clone).find("th").html("").removeClass("sorting");
+            $( '#list thead tr' ).after(clone);
+
+            this.api().columns().every( function () {
+              let column = this;
+              let columnConfig = columns[column.index()];
+
+              switch (columnConfig.type) {
+                case 'text':
+                  $('<input type="text" class="form-control filter input-sm" placeholder="" />')
+                    .appendTo( $('#list thead tr:last th:eq('+column.index()+')') )
+                    .on( 'keyup', function () {
+                      table
+                        .columns( column.index() )
+                        .search( $(this).val() )
+                        .draw();
+                    } );
+                  break;
+                case 'select':
+                  var temp = "";
+                  temp += '<option value=""></option>';
+                  $.each(columnConfig.values, function(value, name) {
+                    temp += '<option value="'+value+'">'+name+'</option>';
+                  });
+                  $('<select class="form-control filter input-sm">'+temp+'</select>')
+                    .appendTo( $('#list thead tr:last th:eq('+column.index()+')') )
+                    .on( 'change', function () {
+                      table
+                        .columns( column.index() )
+                        .search( $(this).val() )
+                        .draw();
+                    } );
+                  break;
+                case 'select-choice':
+                  $('<div>' + columnConfig.content + '</div>')
+                    .appendTo( $('#list thead tr:last th:eq('+column.index()+')') )
+                    .on( 'change', function () {
+                      table
+                        .columns( column.index() )
+                        .search( $(this).val() )
+                        .draw();
+                    } );
+                  break;
+                default:
+                  $('').appendTo( $(column.footer()).empty() );
+              }
+
+            } );
+
+          }
+        });
+
+        $('#list').on( 'draw.dt', function () {
+          $(".show-actions").webuiPopover('destroy'); // the trick
+          $(".show-actions").webuiPopover({
+            placement: 'left',
+          });
+        });
+
+      });
+
+
+    </script>
+
+
+</div>
+
+<div id="listCategoryFilter" style="display:none; position: absolute;">
+    <ul id="listCategory" class="ztree"></ul>
+</div>
+
+
+{{ footer }}

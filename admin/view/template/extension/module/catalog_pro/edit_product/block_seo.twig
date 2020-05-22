@@ -1,0 +1,25 @@
+<div class="seo-data">
+
+    {% for store in stores %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                {{ modal.fields.store }}: {{ store.name }}
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    {% for language in languages %}
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon" title="{{ language.name }}"><img src="language/{{ language.code }}/{{ language.code }}.png"/>&nbsp</span>
+                                    <input type="text" class="form-control" name="seo.{{ store.store_id }}.{{ language.language_id }}" value="{{ item.seo[store.store_id][language.language_id] }}" />
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+</div>

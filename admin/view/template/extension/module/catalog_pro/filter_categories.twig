@@ -1,0 +1,55 @@
+<div class="input-group">
+    <input type="text" class="form-control input-sm" aria-label="..." id="categoryies-filter" readonly />
+    <div class="input-group-btn input-group-sm">
+        <button type="button" class="btn btn-default btn-sm viewList" onclick="showMenu(); return false;"><span class="caret"></span></button>
+    </div><!-- /btn-group -->
+</div><!-- /input-group -->
+
+<script>
+  var setting = {
+    check: {
+      enable: true,
+      chkboxType: { "Y" : "s", "N" : "s" }
+    },
+    view: {
+      dblClickExpand: false
+    },
+    data: {
+      simpleData: {
+        enable: true
+      }
+    },
+    callback: {
+      onCheck: onCategoryCheck
+    }
+  };
+
+  function onCategoryCheck(e) {
+    let names = new Array();
+    let ids = $.map(categoryTree.getCheckedNodes(), function(checked) { names.push(checked.name); return checked.id; });
+
+    if (ids.length > 2)
+        $("#categoryies-filter").val('{{ more_two_categories }}');
+    else
+        $("#categoryies-filter").val(names.join(", "));
+
+    let columnIndex = 0;
+    column = $.map(columns, function(column, idx) { if(column['data'] == "category") {columnIndex = idx; return column;} return null; });
+    table
+      .columns( columnIndex )
+      .search( ids )
+      .draw();
+  }
+
+  var zCategoriesNodes =[
+    {% for category in categories %}
+        {id:{{ category['category_id'] }}, pId:{{ category['parent_id'] }}, name:"{{ category['name'] }}"},
+    {% endfor %}
+  ];
+
+  var categoryTree;
+
+  $(document).ready(function(){
+    categoryTree = $.fn.zTree.init($("#listCategory"), setting, zCategoriesNodes);
+  });
+</script>

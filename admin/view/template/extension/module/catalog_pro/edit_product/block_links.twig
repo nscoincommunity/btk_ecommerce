@@ -1,0 +1,66 @@
+<div class="row block-data">
+    <div class="col-xs-12">
+        <div class="form-group">
+            <label for="main-manufacturer">{{ modal.fields.manufacturer }}</label>
+            <select name="manufacturer_id" id="main-manufacturer" class="form-control select2">
+                {% for manufacturer in manufacturers %}
+                    <option value="{{ manufacturer.manufacturer_id }}" {% if manufacturer.manufacturer_id == item.manufacturer_id %} selected {% endif %}>{{ manufacturer.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="col-xs-12">
+        <div class="form-group">
+            <label for="main-category">{{ modal.fields.category }}</label>
+            {% include 'extension/module/catalog_pro/edit_product/field_category.twig' with {item: item, categories: categories} %}
+        </div>
+    </div>
+
+    <div class="col-xs-12">
+        <div class="form-group">
+            <label for="main-filter">{{ modal.fields.filter }}</label>
+            <select name="filters" id="main-filter" class="form-control select2" multiple="multiple">
+                {% for group,rows in filters %}
+                    {% for filter in rows %}
+                        <option value="{{ filter.filter_id }}" {% if filter.filter_id in item.filters %} selected {% endif %}>{{ filter.name }} ({{ group }})</option>
+                    {% endfor %}
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="col-xs-12">
+        <div class="form-group">
+            <label for="main-stores">{{ modal.fields.stores }}</label>
+            <select name="stores" id="main-stores" class="form-control select2" multiple="multiple">
+                {% for store in stores %}
+                    <option value="{{ store.store_id }}" {% if store.store_id in item.stores %} selected {% endif %}>{{ store.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="col-xs-12">
+        <div class="form-group">
+            <label for="main-downloads">{{ modal.fields.downloads }}</label>
+            <select name="downloads" id="main-downloads" class="form-control select2" multiple="multiple">
+                {% for download in downloads %}
+                    <option value="{{ download.download_id }}" {% if download.download_id in item.downloads %} selected {% endif %}>{{ download.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="col-xs-12">
+        <div class="form-group">
+            <label for="main-related">{{ modal.fields.related }}</label>
+            <select name="related" id="main-related" class="form-control select2-ajax" multiple="multiple" data-source="{{ ajaxProducts }}">
+                {% for r in related %}
+                    <option value="{{ r.id }}" selected>{{ r.text }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+</div>

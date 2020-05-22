@@ -1,0 +1,867 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="container-fluid">
+		<div class="w_wrap">
+			<div class="w_header">
+				<div class="flscr_btn"><i class="fa fa-arrows-alt"></i></div>
+				<h1>{{ heading_title }}</h1>
+				<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+					<li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+				{% endfor %}
+				</ul>
+			</div>
+			<div class="w_menu">
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#tab-general" data-toggle="tab"><i class="fa fa-edit"></i> {{ tab_general }}</a></li>
+					<li><a href="#tab-setting" data-toggle="tab"><i class="fa fa-cog"></i> {{ tab_setting }}</a></li>
+					<li><a href="#tab-language" data-toggle="tab"><i class="fa fa-language"></i> {{ tab_language }}</a></li>
+					<li><a href="#tab-custom" data-toggle="tab"><i class="fa fa-desktop"></i> {{ tab_custom }}</a></li>
+				</ul>
+			</div>
+			{% if error_warning %}
+			<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+			  <button type="button" class="close" data-dismiss="alert">&times;</button>
+			</div>
+			{% endif %}
+			<div class="w_content">	
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-stepcheckout" class="form-horizontal">
+					<div class="tab-content">
+						<div class="tab-pane active" id="tab-general">
+							 <div class="form-group">
+								<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+								<div class="col-sm-6">
+								  <select name="module_stepcheckout_status" id="input-status" class="form-control">
+									{% if module_stepcheckout_status %}
+									<option value="1" selected="selected">{{ text_enabled }}</option>
+									<option value="0">{{ text_disabled }}</option>
+									{% else %}
+									<option value="1">{{ text_enabled }}</option>
+									<option value="0" selected="selected">{{ text_disabled }}</option>
+									{% endif %}
+								  </select>
+								</div>
+							  </div>
+							  <div class="form-group">
+								<label class="col-sm-2 control-label" for="input-country"><span data-toggle="tooltip" title="" data-original-title="Set Default Country">{{ entry_country }}</span></label>
+								<div class="col-sm-6">
+								  <select name="module_stepcheckout_country" id="input-country" class="form-control">
+									{% for country in countries %}
+									{% if country['country_id'] == module_stepcheckout_country %}
+									<option value="{{ country['country_id'] }}" selected="selected">{{ country['name'] }}</option>
+									{% else %}
+									<option value="{{ country['country_id'] }}">{{ country['name'] }}</option>
+									{% endif %}
+									{% endfor %}
+								  </select>
+								</div>
+							</div>
+						  <div class="form-group">
+							<label class="col-sm-2 control-label" for="input-zone"><span data-toggle="tooltip" title="" data-original-title="Set Default zone">{{ entry_zone }}</span></label>
+							<div class="col-sm-6">
+							  <select name="module_stepcheckout_zone" id="input-zone" class="form-control">
+							  </select>
+							</div>
+						  </div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label" for="input-heading"><span data-toggle="tooltip" title="Disable Cart Page">{{ entry_cartpage }}</span></label>
+									<div class="col-sm-6">
+										<div class="btn-group" data-toggle="buttons">
+											<label class="btn btn-primary1 {% if module_stepcheckout_cartpage %}active{% endif %}">
+											<input type="radio" name="module_stepcheckout_cartpage" {% if module_stepcheckout_cartpage %}checked="checked"{% endif %} value="1">{{ text_yes }}
+											</label>
+											<label class="btn btn-primary1 {% if not module_stepcheckout_cartpage %}active{% endif %}">
+											<input type="radio" name="module_stepcheckout_cartpage" {% if not module_stepcheckout_cartpage %}checked="checked"{% endif %} value="0">{{ text_no }}
+											</label>
+										</div>
+									</div>
+								</div>
+								</div>
+								<div class="tab-pane" id="tab-setting">
+									<div class="row">
+										<div class="col-sm-3">
+											<ul class="nav nav-pills nav-stacked">
+												<li class="active"><a href="#tab-general1" data-toggle="tab">{{ tab_general }}</a></li>
+												<li><a href="#tab-social_login" data-toggle="tab">{{ tab_sociallogin }}</a></li>
+												<li><a href="#tab-acc-billing" data-toggle="tab">{{ tab_accbilling }}</a></li>
+												<li><a href="#tab-payment-shipping" data-toggle="tab">{{ tab_paymentshipping }}</a></li>
+												<li><a href="#tab-shoppingcart" data-toggle="tab">{{ tab_shoppingcart }}</a></li>
+												<li><a href="#tab-confirmorder" data-toggle="tab">{{ tab_confirmorder }}</a></li>
+											</ul>
+										</div>
+										<div class="col-sm-9">
+										<div class="tab-content">
+											<div class="tab-pane active" id="tab-general1">
+												<div class="form-group">
+												<label class="col-sm-2 control-label" for="input-heading"><span data-toggle="tooltip" title="{{ help_defaultpanel }}">{{ entry_defaultpanel }}</span></label>
+												<div class="col-sm-10">
+													<div class="btn-group" data-toggle="buttons">
+														<label class="btn btn-primary1 {% if module_stepcheckout_displaypanel=='2' %}active{% endif %}">
+														<input type="radio" name="module_stepcheckout_displaypanel" {% if module_stepcheckout_displaypanel=='2' %}checked="checked"{% endif %}value="2">{{ text_register }}
+														</label>
+														<label class="btn btn-primary1 {% if module_stepcheckout_displaypanel=='1' %}active{% endif %}">
+														<input type="radio" name="module_stepcheckout_displaypanel" {% if module_stepcheckout_displaypanel=='1' %}checked="checked"{% endif %} value="1">{{ text_guest }}
+														</label>
+														<label class="btn btn-primary1 {% if module_stepcheckout_displaypanel==0 %}active{% endif %}">
+														<input type="radio" name="module_stepcheckout_displaypanel" {% if module_stepcheckout_displaypanel==0 %}checked="checked"{% endif %} value="0">{{ text_login }}
+														</label>
+													</div>
+												</div>
+												</div>
+												<div class="form-group">
+												<label class="col-sm-2 control-label" for="input-register">{{ entry_hideregister }}</label>
+												<div class="col-sm-10">
+													<div class="btn-group" data-toggle="buttons">
+													<label class="btn btn-primary1 {% if module_stepcheckout_register %}active{% endif %}">
+													<input type="radio" name="module_stepcheckout_register" {% if module_stepcheckout_register %}checked="checked"{% endif %} value="1">{{ text_yes }}
+													</label>
+													<label class="btn btn-primary1 {% if not module_stepcheckout_register %}active{% endif %}">
+													<input type="radio" name="module_stepcheckout_register" {% if not module_stepcheckout_register %}checked="checked"{% endif %} value="0">{{ text_no }}
+													</label>
+													</div>
+												</div>
+												</div>
+												<div class="form-group">
+												<label class="col-sm-2 control-label" for="input-guest">{{ entry_hideguest }}</label>
+												<div class="col-sm-10">
+													<div class="btn-group" data-toggle="buttons">
+													<label class="btn btn-primary1 {% if module_stepcheckout_guest %}active{% endif %}">
+													<input type="radio" name="module_stepcheckout_guest" {% if module_stepcheckout_guest %}checked="checked"{% endif %} value="1">{{ text_yes }}
+													</label>
+													<label class="btn btn-primary1 {% if not module_stepcheckout_guest %}active{% endif %}">
+													<input type="radio" name="module_stepcheckout_guest" {% if not module_stepcheckout_guest %}checked="checked"{% endif %} value="0">{{ text_no }}
+													</label>
+													</div>
+												</div>
+												</div>
+												<div class="form-group">
+												<label class="col-sm-2 control-label" for="input-guest">{{ entry_hidelogin }}</label>
+												<div class="col-sm-10">
+													<div class="btn-group" data-toggle="buttons">
+													<label class="btn btn-primary1 {% if module_stepcheckout_login %}active{% endif %}">
+													<input type="radio" name="module_stepcheckout_login" {% if module_stepcheckout_login %}checked="checked"{% endif %} value="1">{{ text_yes }}
+													</label>
+													<label class="btn btn-primary1 {% if not module_stepcheckout_login %}active{% endif %}">
+													<input type="radio" name="module_stepcheckout_login" {% if not module_stepcheckout_login %}checked="checked"{% endif %} value="0">{{ text_no }}
+													</label>
+													</div>
+												</div>
+												</div>
+											</div>
+											<div class="tab-pane" id="tab-social_login">
+												<legend>{{ text_flogin }}</legend>
+												<fieldset>
+													<div class="form-group">
+														<label class="col-sm-2 control-label" for="input-fstatus">{{ entry_status }}</label>
+														<div class="col-sm-8">
+															<select name="module_stepcheckout_fstatus" id="input-fstatus" class="form-control">
+															{% if module_stepcheckout_fstatus %}
+															<option value="1" selected="selected">{{ text_enabled }}</option>
+															<option value="0">{{ text_disabled }}</option>
+															{% else %}
+															<option value="1">{{ text_enabled }}</option>
+															<option value="0" selected="selected">{{ text_disabled }}</option>
+																{% endif %}
+															</select>
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="col-sm-2 control-label" for="input-fappid">{{ entry_fappid }}</label>
+														<div class="col-sm-8">
+															<input type="text" name="module_stepcheckout_fappid" id="input-fappid" class="form-control" value="{{ module_stepcheckout_fappid }}"/>
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="col-sm-2 control-label" for="input-fsecretkey">{{ entry_fappappsecret }}</label>
+														<div class="col-sm-8">
+															<input type="text" name="module_stepcheckout_fsecretkey" id="input-fsecretkey" class="form-control" value="{{ module_stepcheckout_fsecretkey }}"/>
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="col-sm-2 control-label" for="input-fcallback">{{ entry_fcallbackurl }}</label>
+														<div class="col-sm-8">
+															<input readonly="readonly" type="text" name="module_stepcheckout_fcallback" id="input-fcallback" class="form-control" value="{{ module_stepcheckout_fcallback }}"/>
+														</div>
+													</div>
+													</fieldset>
+													<legend>{{ text_glogin }}</legend>
+													<fieldset>
+													<div class="form-group">
+													<label class="col-sm-2 control-label" for="input-gstatus">{{ entry_status }}</label>
+													<div class="col-sm-8">
+														<select name="module_stepcheckout_gstatus" id="input-gstatus" class="form-control">
+														{% if module_stepcheckout_gstatus %}
+														<option value="1" selected="selected">{{ text_enabled }}</option>
+														<option value="0">{{ text_disabled }}</option>
+														{% else %}
+														<option value="1">{{ text_enabled }}</option>
+														<option value="0" selected="selected">{{ text_disabled }}</option>
+														{% endif %}
+														</select>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-2 control-label" for="input-gappid">{{ entry_gappid }}</label>
+													<div class="col-sm-8">
+														<input type="text" name="module_stepcheckout_gappid" id="input-gappid" class="form-control" value="{{ module_stepcheckout_gappid }}"/>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-2 control-label" for="input-gsecretkey">{{ entry_gappappsecret }}</label>
+													<div class="col-sm-8">
+														<input type="text" name="module_stepcheckout_gsecretkey" id="input-gsecretkey" class="form-control" value="{{ module_stepcheckout_gsecretkey }}"/>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-2 control-label" for="input-gcallback">{{ entry_gcallbackurl }}</label>
+													<div class="col-sm-8">
+														<input readonly="readonly" type="text" name="module_stepcheckout_gcallback" id="input-gcallback" class="form-control" value="{{ module_stepcheckout_gcallback }}"/>
+													</div>
+												</div>
+												</fieldset>
+												<legend>{{ text_Llogin }}</legend>
+												<fieldset>
+												<div class="form-group">
+													<label class="col-sm-2 control-label" for="input-lstatus">{{ entry_status }}</label>
+													<div class="col-sm-8">
+														<select name="module_stepcheckout_lstatus" id="input-lstatus" class="form-control">
+														{% if module_stepcheckout_lstatus %}
+														<option value="1" selected="selected">{{ text_enabled }}</option>
+														<option value="0">{{ text_disabled }}</option>
+														{% else %}
+														<option value="1">{{ text_enabled }}</option>
+														<option value="0" selected="selected">{{ text_disabled }}</option>
+														{% endif %}
+														</select>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-2 control-label" for="input-lappid">{{ entry_lappid }}</label>
+													<div class="col-sm-8">
+														<input type="text" name="module_stepcheckout_lappid" id="input-lappid" class="form-control" value="{{ module_stepcheckout_lappid }}"/>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-2 control-label" for="input-lsecretkey">{{ entry_lappappsecret }}</label>
+													<div class="col-sm-8">
+														<input type="text" name="module_stepcheckout_lsecretkey" id="input-lsecretkey" class="form-control" value="{{ module_stepcheckout_lsecretkey }}"/>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-2 control-label" for="input-lcallback">{{ entry_lcallbackurl }}</label>
+													<div class="col-sm-8">
+														<input readonly="readonly" type="text" name="module_stepcheckout_lcallback" id="input-lcallback" class="form-control" value="{{ module_stepcheckout_lcallback }}"/>
+													</div>
+												</div>
+												</fieldset>
+											</div>
+											<div class="tab-pane" id="tab-acc-billing">
+												 <div class="form-group">
+												<label class="col-sm-2 control-label" for="input-customer-group">{{ entry_customer_group }}</label>
+												<div class="col-sm-10">
+												  <select name="module_stepcheckout_customergroup" id="input-customer-group" class="form-control">
+												  {% for customer_group in customer_groups %}
+													{% if customer_group['customer_group_id'] == module_stepcheckout_customergroup %}
+													<option value="{{ customer_group['customer_group_id'] }}" selected="selected">{{ customer_group['name'] }}</option>
+													{% else %}
+													<option value="{{ customer_group['customer_group_id'] }}">{{ customer_group['name'] }}</option>
+													{% endif %}
+													{% endfor %}
+												  </select>
+												</div>
+											  </div>
+											  <div class="form-group">
+												<label class="col-sm-2 control-label" for="input-information">{{ entry_information }}</label>
+												<div class="col-sm-10">
+												  <select class="form-control" name="module_stepcheckout_information">
+													<option value="0">{{ text_select }}</option>
+													{% for information in informations %}
+														{% if information['information_id']==module_stepcheckout_information %}
+															{% set select = 'selected=selected' %}
+														{% else %}
+															{% set select = '' %}
+													{% endif %}
+														<option {{ select }} value="{{ information['information_id'] }}">{{ information['title'] }}</option>
+													{% endfor %}
+												  </select>
+												</div>
+											 </div>
+											 <div class="form-group">
+												<label class="col-sm-2 control-label" for="input-heading">{{ entry_newsletter }}</label>
+												<div class="col-sm-10">
+												<div class="btn-group" data-toggle="buttons">
+													<label class="btn btn-primary1 {% if module_stepcheckout_newsletter %}active{% endif %}">
+													<input type="radio" name="module_stepcheckout_newsletter" {% if module_stepcheckout_newsletter %}checked="checked"{% endif %} value="1">{{ text_yes }}
+													</label>
+													<label class="btn btn-primary1 {% if not module_stepcheckout_newsletter %}active{% endif %}">
+													<input type="radio" name="module_stepcheckout_newsletter" {% if not module_stepcheckout_newsletter %}checked="checked"{% endif %} value="0">{{ text_no }}
+													</label>
+													</div>
+												</div>
+											</div>
+											</div>
+											<div class="tab-pane" id="tab-payment-shipping">
+											<div class="form-group">
+												<label class="col-sm-2 control-label" for="input-payment">{{ entry_payment }}</label>
+												<div class="col-sm-10">
+												  <select class="form-control" name="module_stepcheckout_payment">
+													<option value="0">{{ text_select }}</option>
+													{% for payment_method in payment_methods %}
+														{% if payment_method['code']==module_stepcheckout_payment %}
+													{% set select = 'selected=selected' %}
+														{% else %}
+															{% set select = '' %}
+													{% endif %}
+														<option {{ select }} value="{{ payment_method['code'] }}">{{ payment_method['name'] }}</option>
+													{% endfor %}
+												  </select>
+												</div>
+											 </div>
+											 <div class="form-group">
+												<label class="col-sm-2 control-label" for="input-shipping">{{ entry_shipping }}</label>
+												<div class="col-sm-10">
+												  <select class="form-control" name="module_stepcheckout_shipping">
+													<option value="0">{{ text_select }}</option>
+													{% for shipping_method in shipping_methods %}
+														{% if shipping_method['code']==module_stepcheckout_shipping %}
+															{% set select = 'selected=selected' %}
+														{% else %}
+															{% set select = '' %}
+													{% endif %}
+														<option {{ select }} value="{{ shipping_method['code'] }}">{{ shipping_method['name'] }}</option>
+													{% endfor %}
+												  </select>
+												</div>
+											 </div>
+											</div>
+											<div class="tab-pane" id="tab-shoppingcart">
+											  <div class="form-group">
+												<label class="col-sm-2 control-label" for="input-shoppingcart">{{ entry_shoppingcart }}</label>
+												<div class="col-sm-10">
+													<div class="btn-group" data-toggle="buttons">
+													<label class="btn btn-primary1 {% if module_stepcheckout_shoppingcart %}active{% endif %}">
+													<input type="radio" name="module_stepcheckout_shoppingcart" {% if module_stepcheckout_shoppingcart %}checked="checked"{% endif %} value="1">{{ text_yes }}
+													</label>
+													<label class="btn btn-primary1 {% if not module_stepcheckout_shoppingcart %}active{% endif %}">
+													<input type="radio" name="module_stepcheckout_shoppingcart" {% if not module_stepcheckout_shoppingcart %}checked="checked"{% endif %} value="0">{{ text_no }}
+													</label>
+													</div>
+													</div>
+												</div>
+												<div class="form-group">
+												<label class="col-sm-2 control-label" for="input-quantity">{{ entry_quantity }}</label>
+												<div class="col-sm-10">
+												<div class="btn-group" data-toggle="buttons">
+													<label class="btn btn-primary1 {% if module_stepcheckout_quantity %}active{% endif %}">
+													<input type="radio" name="module_stepcheckout_quantity" {% if module_stepcheckout_quantity %}checked="checked"{% endif %} value="1">{{ text_yes }}
+													</label>
+													<label class="btn btn-primary1 {% if not module_stepcheckout_quantity %}active{% endif %}">
+													<input type="radio" name="module_stepcheckout_quantity" {% if not module_stepcheckout_quantity %}checked="checked"{% endif %} value="0">{{ text_no }}
+													</label>
+													</div>
+													</div>
+												</div>
+												<div class="form-group">
+												<label class="col-sm-2 control-label" for="input-reward">{{ entry_showreward }}</label>
+												<div class="col-sm-10">
+												<div class="btn-group" data-toggle="buttons">
+													<label class="btn btn-primary1 {% if module_stepcheckout_reward %}active{% endif %}">
+													<input type="radio" name="module_stepcheckout_reward" {% if module_stepcheckout_reward %}checked="checked"{% endif %} value="1">{{ text_yes }}
+													</label>
+													<label class="btn btn-primary1 {% if not module_stepcheckout_reward %}active{% endif %}">
+													<input type="radio" name="module_stepcheckout_reward" {% if not module_stepcheckout_reward %}checked="checked"{% endif %} value="0">{{ text_no }}
+													</label>
+													</div>
+													</div>
+												</div>
+												<div class="form-group">
+												<label class="col-sm-2 control-label" for="input-voucher">{{ entry_showvoucher }}</label>
+												<div class="col-sm-10">
+												<div class="btn-group" data-toggle="buttons">
+													<label class="btn btn-primary1 {% if module_stepcheckout_voucher %}active{% endif %}">
+													<input type="radio" name="module_stepcheckout_voucher" {% if module_stepcheckout_voucher %}checked="checked"{% endif %} value="1">{{ text_yes }}
+													</label>
+													<label class="btn btn-primary1 {% if not module_stepcheckout_voucher %}active{% endif %}">
+													<input type="radio" name="module_stepcheckout_voucher" {% if not module_stepcheckout_voucher %}checked="checked"{% endif %} value="0">{{ text_no }}
+													</label>
+													</div>
+													</div>
+												</div>
+												<div class="form-group">
+												<label class="col-sm-2 control-label" for="input-coupon">{{ entry_showcoupon }}</label>
+												<div class="col-sm-10">
+												<div class="btn-group" data-toggle="buttons">
+													<label class="btn btn-primary1 {% if module_stepcheckout_coupon %}active{% endif %}">
+													<input type="radio" name="module_stepcheckout_coupon" {% if module_stepcheckout_coupon %}checked="checked"{% endif %} value="1">{{ text_yes }}
+													</label>
+													<label class="btn btn-primary1 {% if not module_stepcheckout_coupon %}active{% endif %}">
+													<input type="radio" name="module_stepcheckout_coupon" {% if not module_stepcheckout_coupon %}checked="checked"{% endif %} value="0">{{ text_no }}
+													</label>
+													</div>
+													</div>
+												</div>
+												<div class="form-group">
+												<label class="col-sm-2 control-label" for="input-image">{{ entry_showimage }}</label>
+												<div class="col-sm-10">
+												<div class="btn-group" data-toggle="buttons">
+													<label class="btn btn-primary1 {% if module_stepcheckout_productimage %}active{% endif %}">
+													<input type="radio" name="module_stepcheckout_productimage" {% if module_stepcheckout_productimage %}checked="checked"{% endif %} value="1">{{ text_yes }}
+													</label>
+													<label class="btn btn-primary1 {% if not module_stepcheckout_productimage %}active{% endif %}">
+													<input type="radio" name="module_stepcheckout_productimage" {% if not module_stepcheckout_productimage %}checked="checked"{% endif %} value="0">{{ text_no }}
+													</label>
+													</div>
+													</div>
+												</div>
+												<div class="form-group">
+												<label class="col-sm-2 control-label">{{ entry_imagewidthheight }}</label>
+												 <div class="col-sm-3">
+													<input class="form-control" type="text" name="module_stepcheckout_productimagewidth" value="{{ module_stepcheckout_productimagewidth }}"/>
+												  </div>
+												 <div class="col-sm-3">
+													<input class="form-control" type="text" name="module_stepcheckout_productimageheight" value="{{ module_stepcheckout_productimageheight }}"/>
+												  </div>
+												</div>
+											</div>
+											<div class="tab-pane" id="tab-confirmorder">
+												<div class="form-group">
+												<label class="col-sm-2 control-label" for="input-information">{{ entry_termcondition }}</label>
+												<div class="col-sm-10">
+												  <select class="form-control" name="module_stepcheckout_termcondition">
+													<option value="0">{{ text_select }}</option>
+														{% for information in informations %}
+															{% if information['information_id']==module_stepcheckout_termcondition %}
+															{% set select = 'selected=selected' %}
+														{% else %}
+															{% set select = '' %}
+													{% endif %}
+														<option {{ select }} value="{{ information['information_id'] }}">{{ information['title'] }}</option>
+													{% endfor %}
+												  </select>
+												</div>
+											 </div>
+											 <div class="form-group">
+												<label class="col-sm-2 control-label" for="input-heading">{{ entry_autochecked }}</label>
+												<div class="col-sm-10">
+												<div class="btn-group" data-toggle="buttons">
+													<label class="btn btn-primary1 {% if module_stepcheckout_autotermcondition %}active{% endif %}">
+													<input type="radio" name="module_stepcheckout_autotermcondition" {% if module_stepcheckout_autotermcondition %}checked="checked"{% endif %} value="1">{{ text_yes }}
+													</label>
+													<label class="btn btn-primary1 {% if not module_stepcheckout_autotermcondition %}active{% endif %}">
+													<input type="radio" name="module_stepcheckout_autotermcondition" {% if not module_stepcheckout_autotermcondition %}checked="checked"{% endif %} value="0">{{ text_no }}
+													</label>
+													</div>
+													</div>
+												</div>
+												<div class="form-group">
+												<label class="col-sm-2 control-label" for="input-comment">{{ entry_comment }}</label>
+												<div class="col-sm-10">
+												<div class="btn-group" data-toggle="buttons">
+													<label class="btn btn-primary1 {% if module_stepcheckout_comment %}active{% endif %}">
+													<input type="radio" name="module_stepcheckout_comment" {% if module_stepcheckout_comment %}checked="checked"{% endif %} value="1">{{ text_yes }}
+													</label>
+													<label class="btn btn-primary1 {% if not module_stepcheckout_comment %}active{% endif %}">
+													<input type="radio" name="module_stepcheckout_comment" {% if not module_stepcheckout_comment %}checked="checked"{% endif %} value="0">{{ text_no }}
+													</label>
+													</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="tab-pane" id="tab-language">
+								<div class="row">
+									<div class="col-sm-3">
+										<ul class="nav nav-pills nav-stacked">
+											<li class="active"><a href="#tab-general2" data-toggle="tab">{{ tab_general }}</a></li>
+											<li><a href="#tab-sociallogin" data-toggle="tab">{{ text_social_login }}</a></li>
+											<li><a href="#tab-account" data-toggle="tab">{{ text_step_account }}</a></li>
+											<li><a href="#tab-address" data-toggle="tab">{{ text_step_address }}</a></li>
+											<li><a href="#tab-payment" data-toggle="tab">{{ text_step_payment }}</a></li>
+										</ul>
+									</div>
+									<div class="col-sm-9">
+										<div class="tab-content">
+											<div class="tab-pane active" id="tab-general2">
+												<ul class="nav nav-tabs" id="language">
+													{% for language in languages %}
+													<li><a href="#language{{ language['language_id'] }}" data-toggle="tab"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" /> {{ language['name'] }}</a></li>
+													{% endfor %}
+												</ul>
+												<div class="tab-content">
+													{% for language in languages %}
+													 <div class="tab-pane" id="language{{ language.language_id }}">
+														<div class="form-group required">
+														<label class="col-sm-2 control-label" for="input-heading{{ language['language_id'] }}">{{ entry_heading }}</label>
+														<div class="col-sm-10">
+														  <input type="text" name="module_stepcheckout_description[{{ language['language_id'] }}][heading]" value="{{ module_stepcheckout_description[language['language_id']] ? module_stepcheckout_description[language['language_id']]['heading'] }}" placeholder="{{ entry_heading }}" id="input-heading{{ language['language_id'] }}" class="form-control" />
+														</div>
+													  </div>
+													  <div class="form-group">
+														<label class="col-sm-2 control-label" for="input-description{{ language['language_id'] }}">{{ entry_description }}</label>
+														<div class="col-sm-10">
+														<textarea name="module_stepcheckout_description[{{ language['language_id'] }}][description]" placeholder="{{ entry_description }}" data-toggle="summernote" data-lang="{{ summernote }}" id="input-description{{ language['language_id'] }}" class="form-control">{{ module_stepcheckout_description[language['language_id']] ? module_stepcheckout_description[language['language_id']]['description'] }}</textarea>
+														</div>
+													  </div>
+													  <div class="form-group">
+														<label class="col-sm-2 control-label" for="input-continueshipping{{ language['language_id'] }}">{{ entry_continueshipping }}</label>
+														<div class="col-sm-10">
+														  <input type="text" name="module_stepcheckout_description[{{ language['language_id'] }}][continueshipping]" value="{{ module_stepcheckout_description[language['language_id']] ? module_stepcheckout_description[language['language_id']]['continueshipping'] }}" placeholder="{{ entry_continueshipping }}" id="input-continueshipping{{ language['language_id'] }}" class="form-control" />
+														</div>
+													  </div>	
+													 </div>
+													  {% endfor %}
+												</div>
+											</div>
+											<div class="tab-pane" id="tab-sociallogin">
+												<ul class="nav nav-tabs" id="sociallogin_language">
+													{% for language in languages %}
+													<li><a href="#sociallogin_language{{ language['language_id'] }}" data-toggle="tab"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" /> {{ language['name'] }}</a></li>
+													 {% endfor %}
+												</ul>
+												<div class="tab-content">
+													{% for language in languages %}
+													 <div class="tab-pane" id="sociallogin_language{{ language.language_id }}">
+													  <div class="form-group">
+														<label class="col-sm-2 control-label" for="input-heading{{ language['language_id'] }}">{{ entry_panelheading }}</label>
+														<div class="col-sm-10">
+														  <input type="text" name="module_stepcheckout_sociallogin[{{ language['language_id'] }}][heading]" value="{{ module_stepcheckout_sociallogin[language['language_id']] ? module_stepcheckout_sociallogin[language['language_id']]['heading'] }}" placeholder="{{ entry_panelheading }}" id="input-heading{{ language['language_id'] }}" class="form-control" />
+														</div>
+													  </div>
+													  <div class="form-group">
+														<label class="col-sm-2 control-label" for="input-ftext{{ language['language_id'] }}">{{ entry_ftext }}</label>
+														<div class="col-sm-10">
+														  <input type="text" name="module_stepcheckout_sociallogin[{{ language['language_id'] }}][ftext]" value="{{ module_stepcheckout_sociallogin[language['language_id']] ? module_stepcheckout_sociallogin[language['language_id']]['ftext'] }}" placeholder="{{ entry_ftext }}" id="input-ftext{{ language['language_id'] }}" class="form-control" />
+														</div>
+													  </div>
+													  <div class="form-group">
+														<label class="col-sm-2 control-label" for="input-gtext{{ language['language_id'] }}">{{ entry_gtext }}</label>
+														<div class="col-sm-10">
+														  <input type="text" name="module_stepcheckout_sociallogin[{{ language['language_id'] }}][gtext]" value="{{ module_stepcheckout_sociallogin[language['language_id']] ? module_stepcheckout_sociallogin[language['language_id']]['gtext'] }}" placeholder="{{ entry_gtext }}" id="input-gtext{{ language['language_id'] }}" class="form-control" />
+														</div>
+													  </div>
+													  <div class="form-group">
+														<label class="col-sm-2 control-label" for="input-ltext{{ language['language_id'] }}">{{ entry_ltext }}</label>
+														<div class="col-sm-10">
+														  <input type="text" name="module_stepcheckout_sociallogin[{{ language['language_id'] }}][ltext]" value="{{ module_stepcheckout_sociallogin[language['language_id']] ? module_stepcheckout_sociallogin[language['language_id']]['ltext'] }}" placeholder="{{ entry_ltext }}" id="input-ltext{{ language['language_id'] }}" class="form-control" />
+														</div>
+													  </div>
+													  </div>
+													{% endfor %}
+												</div>
+											</div>
+											<div class="tab-pane" id="tab-account">
+												<ul class="nav nav-tabs" id="language2">
+													{% for language in languages %}
+													<li><a href="#language2{{ language['language_id'] }}" data-toggle="tab"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" /> {{ language['name'] }}</a></li>
+													{% endfor %}
+												</ul>
+												<div class="tab-content">
+													{% for language in languages %}
+													<div class="tab-pane" id="language2{{ language.language_id }}">
+													<div class="form-group">
+														<label class="col-sm-2 control-label" for="input-account{{ language['language_id'] }}">{{ entry_panelheading }}</label>
+														<div class="col-sm-10">
+														  <input type="text" name="module_stepcheckout_account[{{ language['language_id'] }}][heading]" value="{{ module_stepcheckout_account[language['language_id']] ? module_stepcheckout_account[language['language_id']]['heading'] }}" placeholder="{{ entry_panelheading }}" id="input-account{{ language['language_id'] }}" class="form-control" />
+														</div>
+													  </div>
+													  <div class="form-group">
+														<label class="col-sm-2 control-label" for="input-register{{ language['language_id'] }}">{{ entry_register }}</label>
+														<div class="col-sm-10">
+														  <input type="text" name="module_stepcheckout_account[{{ language['language_id'] }}][register]" value="{{ module_stepcheckout_account[language['language_id']] ? module_stepcheckout_account[language['language_id']]['register'] }}" placeholder="{{ entry_register }}" id="input-register{{ language['language_id'] }}" class="form-control" />
+														</div>
+													  </div>
+													  <div class="form-group">
+														<label class="col-sm-2 control-label" for="input-guest{{ language['language_id'] }}">{{ entry_guest }}</label>
+														<div class="col-sm-10">
+														  <input type="text" name="module_stepcheckout_account[{{ language['language_id'] }}][guest]" value="{{ module_stepcheckout_account[language['language_id']] ? module_stepcheckout_account[language['language_id']]['guest'] }}" placeholder="{{ entry_guest }}" id="input-guest{{ language['language_id'] }}" class="form-control" />
+														</div>
+													  </div>
+													  <div class="form-group">
+														<label class="col-sm-2 control-label" for="input-login{{ language['language_id'] }}">{{ entry_login }}</label>
+														<div class="col-sm-10">
+														  <input type="text" name="module_stepcheckout_account[{{ language['language_id'] }}][login]" value="{{ module_stepcheckout_account[language['language_id']] ? module_stepcheckout_account[language['language_id']]['login'] }}" placeholder="{{ entry_login }}" id="input-login{{ language['language_id'] }}" class="form-control" />
+														</div>
+													  </div>									 
+													  </div>									 
+													{% endfor %}
+												</div>
+											</div>
+											<div class="tab-pane" id="tab-address">
+												<ul class="nav nav-tabs" id="language3">
+													{% for language in languages %}
+													<li><a href="#language3{{ language['language_id'] }}" data-toggle="tab"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" /> {{ language['name'] }}</a></li>
+													{% endfor %}
+												</ul>
+												<div class="tab-content">
+													{% for language in languages %}
+													<div class="tab-pane" id="language3{{ language.language_id }}">
+													<div class="form-group">
+														<label class="col-sm-2 control-label" for="input-address{{ language['language_id'] }}">{{ entry_panelheading }}</label>
+														<div class="col-sm-10">
+														  <input type="text" name="module_stepcheckout_address[{{ language['language_id'] }}][heading]" value="{{ module_stepcheckout_address[language['language_id']] ? module_stepcheckout_address[language['language_id']]['heading'] }}" placeholder="{{ entry_panelheading }}" id="input-address{{ language['language_id'] }}" class="form-control" />
+														</div>
+													  </div>
+													  <div class="form-group">
+														<label class="col-sm-2 control-label" for="input-payment_address{{ language['language_id'] }}">{{ entry_paymentadd }}</label>
+														<div class="col-sm-10">
+														  <input type="text" name="module_stepcheckout_address[{{ language['language_id'] }}][payment_address]" value="{{ module_stepcheckout_address[language['language_id']] ? module_stepcheckout_address[language['language_id']]['payment_address'] }}" placeholder="{{ entry_paymentadd }}" id="input-payment_address{{ language['language_id'] }}" class="form-control" />
+														</div>
+													  </div>
+													  <div class="form-group">
+														<label class="col-sm-2 control-label" for="input-shipping_address{{ language['language_id'] }}">{{ entry_shippingadd }}</label>
+														<div class="col-sm-10">
+														  <input type="text" name="module_stepcheckout_address[{{ language['language_id'] }}][shipping_address]" value="{{ module_stepcheckout_address[language['language_id']] ? module_stepcheckout_address[language['language_id']]['shipping_address'] }}" placeholder="{{ entry_shippingadd }}" id="input-shipping_address{{ language['language_id'] }}" class="form-control" />
+														</div>
+													  </div>
+													  <div class="form-group">
+														<label class="col-sm-2 control-label" for="input-commentlabel{{ language['language_id'] }}">{{ entry_commentlabel }}</label>
+														<div class="col-sm-10">
+														  <input type="text" name="module_stepcheckout_address[{{ language['language_id'] }}][commentlabel]" value="{{ module_stepcheckout_address[language['language_id']] ? module_stepcheckout_address[language['language_id']]['commentlabel'] }}" placeholder="{{ entry_commentlabel }}" id="input-commentlabel{{ language['language_id'] }}" class="form-control" />
+														</div>
+													  </div>
+													  <div class="form-group">
+														<label class="col-sm-2 control-label" for="input-commentplaceholder{{ language['language_id'] }}">{{ entry_commentplaceholder }}</label>
+														<div class="col-sm-10">
+														  <input type="text" name="module_stepcheckout_address[{{ language['language_id'] }}][commentplaceholder]" value="{{ module_stepcheckout_address[language['language_id']] ? module_stepcheckout_address[language['language_id']]['commentplaceholder'] }}" placeholder="{{ entry_commentplaceholder }}" id="input-commentplaceholder{{ language['language_id'] }}" class="form-control" />
+														</div>
+													  </div>
+													  </div>
+													{% endfor %}
+												</div>
+											</div>
+											<div class="tab-pane" id="tab-payment">
+												<ul class="nav nav-tabs" id="language4">
+													{% for language in languages %}
+													<li><a href="#language4{{ language['language_id'] }}" data-toggle="tab"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" /> {{ language['name'] }}</a></li>
+													{% endfor %}
+												</ul>
+												<div class="tab-content">
+													{% for language in languages %}
+													<div class="tab-pane" id="language4{{ language.language_id }}">
+													<div class="form-group">
+														<label class="col-sm-2 control-label" for="input-paymentheading{{ language['language_id'] }}">{{ entry_panelheading }}</label>
+														<div class="col-sm-10">
+														  <input type="text" name="module_stepcheckout_paymentt[{{ language['language_id'] }}][heading]" value="{{ module_stepcheckout_paymentt[language['language_id']] ? module_stepcheckout_paymentt[language['language_id']]['heading'] }}" placeholder="{{ entry_panelheading }}" id="input-paymentheading{{ language['language_id'] }}" class="form-control" />
+														</div>
+													  </div>
+													  <div class="form-group">
+														<label class="col-sm-2 control-label" for="input-paymentheading{{ language['language_id'] }}">{{ entry_paymentmethod }}</label>
+														<div class="col-sm-10">
+														  <input type="text" name="module_stepcheckout_paymentt[{{ language['language_id'] }}][payment_method]" value="{{ module_stepcheckout_paymentt[language['language_id']] ? module_stepcheckout_paymentt[language['language_id']]['payment_method'] }}" placeholder="{{ entry_paymentmethod }}" id="input-paymentheading{{ language['language_id'] }}" class="form-control" />
+														</div>
+													  </div>
+													  <div class="form-group">
+														<label class="col-sm-2 control-label" for="input-shippingheading{{ language['language_id'] }}">{{ entry_shippingmethod }}</label>
+														<div class="col-sm-10">
+														  <input type="text" name="module_stepcheckout_paymentt[{{ language['language_id'] }}][shipping_method]" value="{{ module_stepcheckout_paymentt[language['language_id']] ? module_stepcheckout_paymentt[language['language_id']]['shipping_method'] }}" placeholder="{{ entry_shippingmethod }}" id="input-shippingheading{{ language['language_id'] }}" class="form-control" />
+														</div>
+													  </div>
+													  </div>
+													{% endfor %}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						  <div class="tab-pane" id="tab-success">
+						  <div class="form-group">
+								<label class="col-sm-2 control-label" for="input-module_stepcheckout_successpage"><span data-toggle="tooltip" title="Enable or disable the status">{{ entry_successpage }}</span></label>
+								<div class="col-sm-10">
+								<div class="btn-group" data-toggle="buttons">
+									<label class="btn btn-primary1 {% if module_stepcheckout_successpage %}active{% endif %}">
+									<input type="radio" name="module_stepcheckout_successpage" {% if module_stepcheckout_successpage %}checked="checked"{% endif %} value="1">{{ text_yes }}
+									</label>
+									<label class="btn btn-primary1 {% if not module_stepcheckout_successpage %}active{% endif %}">
+									<input type="radio" name="module_stepcheckout_successpage" {% if not module_stepcheckout_successpage %}checked="checked"{% endif %} value="0">{{ text_no }}
+									</label>
+									</div>
+								</div>
+							</div>
+								<ul class="nav nav-tabs" id="successlanguage">
+									{% for language in languages %}
+									<li><a href="#successlanguage{{ language['language_id'] }}" data-toggle="tab"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" /> {{ language['name'] }}</a></li>
+									{% endfor %}
+								</ul>
+								<div class="tab-content">
+									{% for language in languages %}
+									<div class="tab-pane" id="successlanguage{{ language['language_id'] }}">
+										<div class="form-group required">
+											<label class="col-sm-2 control-label" for="input-success-heading{{ language['language_id'] }}">{{ entry_successheading }}</label>
+											<div class="col-sm-10">
+											  <input type="text" name="module_stepcheckout_success_page[{{ language['language_id'] }}][heading]" value="{{ module_stepcheckout_success_page[language['language_id']] ? module_stepcheckout_success_page[language['language_id']]['heading'] }}" placeholder="{{ entry_heading }}" id="input-heading{{ language['language_id'] }}" class="form-control" />
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label" for="input-success-description{{ language['language_id'] }}">{{ entry_message }}</label>
+											<div class="col-sm-10">
+											  <textarea name="module_stepcheckout_success_page[{{ language['language_id'] }}][description]" rows="5" placeholder="{{ entry_message }}" data-toggle="summernote" data-lang="{{ summernote }}" id="input-description{{ language['language_id'] }}" class="form-control">{{ module_stepcheckout_success_page[language['language_id']] ? module_stepcheckout_success_page[language['language_id']]['description'] }}</textarea>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label" for="input-success-continue{{ language['language_id'] }}">{{ entry_continue }}</label>
+											<div class="col-sm-10">
+											  <input type="text" name="module_stepcheckout_success_page[{{ language['language_id'] }}][continue]" value="{{ module_stepcheckout_success_page[language['language_id']] ? module_stepcheckout_success_page[language['language_id']]['continue'] }}" placeholder="{{ entry_continue }}" id="input-continue{{ language['language_id'] }}" class="form-control" />
+											</div>
+										</div>
+									</div>
+									{% endfor %}
+								</div>
+								<fieldset>
+								<legend>{{ entry_promoteproducts }}</legend>
+								<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-module_stepcheckout_promoteproducts">{{ entry_promoteproducts }}</label>
+								<div class="col-sm-10">
+								<div class="btn-group" data-toggle="buttons">
+									<label class="btn btn-primary1 {% if module_stepcheckout_promoteproducts %}active{% endif %}">
+									<input type="radio" name="module_stepcheckout_promoteproducts" {% if module_stepcheckout_promoteproducts %}checked="checked"{% endif %} value="1">{{ text_yes }}
+									</label>
+									<label class="btn btn-primary1 {% if not module_stepcheckout_promoteproducts %}active{% endif %}">
+									<input type="radio" name="module_stepcheckout_promoteproducts" {% if not module_stepcheckout_promoteproducts %}checked="checked"{% endif %} value="0">{{ text_no }}
+									</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+							<label class="col-sm-2 control-label" for="input-promote-product"><span  data-toggle="tooltip" title="{{ help_products }} ">{{ entry_products }}</span></label>
+							<div class="col-sm-10">
+								<input type="text" name="promote_products" value="" placeholder="{{ entry_products }}" id="input-product" class="form-control" />
+								<div id="promote-product" class="well well-sm" style="height: 150px; overflow: auto;">
+								{% for product in products %}
+								<div id="promote-product{{ product['product_id'] }}"><i class="fa fa-minus-circle"></i> {{ product['name'] }}
+								  <input type="hidden" name="module_stepcheckout_product[]" value="{{ product['product_id'] }}" />
+								</div>
+								{% endfor %}
+							  </div>
+							</div>
+						  </div>
+						  <div class="form-group">
+							<label class="col-sm-2 control-label" for="input-image_height">{{ entry_image_height }}</label>
+							<div class="col-sm-10">
+								<div class="col-sm-5">
+									<input type="text" name="module_stepcheckout_promote_product_width" class="form-control" value="{{ module_stepcheckout_promote_product_width }}"/> 
+								</div>
+								<div class="col-sm-5">
+								  <input type="text" name="module_stepcheckout_promote_product_height" class="form-control" value="{{ module_stepcheckout_promote_product_height }}"/>
+								</div>
+							</div>
+						  </div>
+						  </fieldset>
+							</div>
+						<div class="tab-pane" id="tab-custom">
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-status">{{ entry_customcss }}</label>
+								<div class="col-sm-6">
+									<textarea name="module_stepcheckout_customcss" class="form-control" rows="5" placeholder="Add Custom Css">{{ module_stepcheckout_customcss }}</textarea>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+				<div class="row savebtn">
+					<div class="col-sm-4 col-sm-offset-2">
+						<button type="submit" form="form-stepcheckout" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-warning btn-block center-block"><i class="fa fa-save"></i> {{ button_save }}</button>
+					</div>
+					<div class="col-sm-4">
+						<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default btn-block"><i class="fa fa-reply"></i> {{ button_cancel }}</a>
+					</div>
+				</div>
+			</div>
+			<div class="w_footer">
+				&copy; Webx IT Solutions <br />
+				Version: 1.0
+			</div>
+		</div>
+	</div>
+</div>
+<link href="view/stylesheet/stepcheckout/stepcheckout.css" rel="stylesheet" />
+<script type="text/javascript" src="view/javascript/summernote/summernote.js"></script>
+<link href="view/javascript/summernote/summernote.css" rel="stylesheet" />
+<script type="text/javascript" src="view/javascript/summernote/opencart.js"></script>
+<script type="text/javascript"><!--
+$('input[name=\'promote_products\']').autocomplete({
+source: function(request, response) {
+	$.ajax({
+		url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+		dataType: 'json',
+		success: function(json) {
+			response($.map(json, function(item) {
+				return {
+					label: item['name'],
+					value: item['product_id']
+				}
+			}));
+		}
+	});
+},
+select: function(item) {
+	$('input[name=\'promote_products\']').val('');
+	
+	$('#promote-product' + item['value']).remove();
+	
+	$('#promote-product').append('<div id="promote-product' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="module_stepcheckout_product[]" value="' + item['value'] + '" /></div>');	
+}
+});
+
+$('#promote-product').delegate('.fa-minus-circle', 'click', function() {
+$(this).parent().remove();
+});
+//--></script>
+<script type="text/javascript"><!--
+$('select[name=\'module_stepcheckout_country\']').on('change', function() {
+$.ajax({
+
+	url: 'index.php?route=localisation/country/country&user_token={{ user_token }}&country_id=' + this.value,
+
+	dataType: 'json',
+	beforeSend: function() {
+		$('select[name=\'module_stepcheckout_country\']').after(' <i class="fa fa-circle-o-notch fa-spin"></i>');
+	},
+	complete: function() {
+		$('.fa-spin').remove();
+	},
+	success: function(json) {
+		html = '<option value="">{{ text_select }}</option>';
+
+		if (json['zone'] && json['zone'] != '') {
+			for (i = 0; i < json['zone'].length; i++) {
+				html += '<option value="' + json['zone'][i]['zone_id'] + '"';
+
+				if (json['zone'][i]['zone_id'] == '{{ module_stepcheckout_zone }}') {
+					html += ' selected="selected"';
+				}
+
+				html += '>' + json['zone'][i]['name'] + '</option>';
+			}
+		} else {
+			html += '<option value="0" selected="selected">{{ text_none }}</option>';
+		}
+
+		$('select[name=\'module_stepcheckout_zone\']').html(html);
+		
+		$('#button-save').prop('disabled', false);
+	},
+	error: function(xhr, ajaxOptions, thrownError) {
+		alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+	}
+});
+});
+
+$('select[name=\'module_stepcheckout_country\']').trigger('change');
+//--></script>
+<script type="text/javascript"><!--
+$('#language a:first').tab('show');
+$('#language2 a:first').tab('show');
+$('#language3 a:first').tab('show');
+$('#language4 a:first').tab('show');
+$('#sociallogin_language a:first').tab('show');
+$('#successlanguage a:first').tab('show');
+
+$('.flscr_btn').on('click', function(){
+	$('.w_wrap').toggleClass('fullscreen');
+});
+//--></script>
+{{ footer }}

@@ -1,0 +1,47 @@
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th width="5%">#</th>
+      <th width="20%">Name</th>
+      <th width="25%">Email</th>
+      <th width="25%">Date Added</th>
+      <th width="25%">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% if results|length > 0 %}
+
+  {% for result in results %}
+  <tr>
+      <td>{{ result.user_id }}</td>
+      <td>{{ result.username }}</td>
+      <td>{{ result.email }}</td>
+      <td>{{ result.date_added }}</td>
+      <td>
+        <a target="_blank" href="index.php?route=user/user/edit&user_token={{ user_token }}&user_id={{ result.user_id }}" class="btn btn-default btn-sm">Edit</a>
+        <button type="button" class="btn btn-primary btn-sm" onClick="removeUser({{ result.user_id }});">Delete</button>
+    </td>
+  </tr>
+  {% endfor %}
+  {% else %}
+    <tr>
+      <td colspan="5"><center>There are no users with access yet.</center></td>
+    </tr>
+  {% endif %}
+  </tbody>
+</table>
+<script>
+function removeUser(user_id) {
+      var r=confirm("Are you sure you want to remove this user?");
+      if (r==true) {
+        $.ajax({
+          url: 'index.php?route={{ module_path }}/removeuser&user_token={{ user_token }}',
+          type: 'post',
+          data: {'user_id': user_id},
+          success: function(response) {
+            $("#data").load('index.php?route={{ module_path }}/showusers&user_token={{ user_token }}');
+          }
+      });
+     }
+    }
+</script>

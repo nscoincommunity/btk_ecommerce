@@ -1,0 +1,16 @@
+<div class="attrs-data">
+
+    {% for attribute_id,attribute in item.attributes %}
+        {% include 'extension/module/catalog_pro/edit_product/block_attrs_once.twig' with {attribute_id: attribute_id, attribute: attribute, modal: modal, attributes: attributes, languages: languages} %}
+    {% else %}
+        {% include 'extension/module/catalog_pro/edit_product/block_attrs_once.twig' with {attribute_id: null, attribute: null, modal: modal, attributes: attributes, languages: languages} %}
+    {% endfor %}
+
+    <div class="row">
+        <div class="col-xs-12 text-right">
+            <button type="button" class="btn btn-xs btn-success attribute-add">{{ edit.buttons.attr_add }}</button>
+        </div>
+    </div>
+
+
+</div>

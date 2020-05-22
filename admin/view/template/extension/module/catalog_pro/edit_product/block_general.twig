@@ -1,0 +1,54 @@
+<div class="row">
+    <div class="col-xs-1">
+        <ul class="nav nav-tabs tabs-left vertical-text">
+            {% for language in languages %}
+                <li {% if loop.first %} class="active" {% endif %}><a href="#{{ language.code }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png"/>&nbsp;&nbsp;&nbsp;{{ language.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col-xs-11">
+        <div class="tab-content">
+            {% for language in languages %}
+                <div class="tab-pane {% if loop.first %} active{% endif %}" id="{{ language.code }}">
+                    <form>
+                        <div class="form-group">
+                            <label for="main-name-{{ language.language_id }}">{{ modal.fields.name }}</label>
+                            <input type="text" class="form-control" name="name.{{ language.language_id }}" id="main-name-{{ language.language_id }}" placeholder="{{ modal.fields.name }}" value="{{ names[language.language_id]['name'] }}" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="main-description-{{ language.language_id }}">{{ modal.fields.description }}</label>
+                            <textarea class="form-control" name="description.{{ language.language_id }}" id="main-description-{{ language.language_id }}" placeholder="{{ modal.fields.description }}" data-toggle="summernote" data-lang="{{ summernote }}">{{ names[language.language_id]['description'] }}</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="main-meta-title-{{ language.language_id }}">{{ modal.fields.meta_title }}</label>
+                            <input type="text" class="form-control" name="meta_title.{{ language.language_id }}" id="main-meta-title-{{ language.language_id }}" placeholder="{{ modal.fields.meta_title }}" value="{{ names[language.language_id]['meta_title'] }}" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="main-meta-description-{{ language.language_id }}">{{ modal.fields.meta_description }}</label>
+                            <input type="text" class="form-control" name="meta_description.{{ language.language_id }}" id="main-meta-description-{{ language.language_id }}" placeholder="{{ modal.fields.meta_description }}" value="{{ names[language.language_id]['meta_description'] }}" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="main-meta-keyword-{{ language.language_id }}">{{ modal.fields.meta_keyword }}</label>
+                            <input type="text" class="form-control" name="meta_keyword.{{ language.language_id }}" id="main-meta-keyword-{{ language.language_id }}" placeholder="{{ modal.fields.meta_keyword }}" value="{{ names[language.language_id]['meta_keyword'] }}" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="main-tags-{{ language.language_id }}">{{ modal.fields.tags }}</label>
+                            <input type="text" class="form-control tags" name="tag.{{ language.language_id }}" id="main-tags-{{ language.language_id }}" placeholder="{{ modal.fields.tags }}" value="{{ names[language.language_id]['tag'] }}" />
+                            <div class="alert alert-warning" style="margin-top: 3px">{{ modal.notes.tags }}</div>
+                        </div>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".tags").tagsinput('destroy');
+    $(".tags").tagsinput();
+</script>

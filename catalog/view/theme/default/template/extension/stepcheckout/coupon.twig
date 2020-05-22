@@ -1,0 +1,40 @@
+<div id="coupon" class="copuon">
+	<button class="btn btn-link btn-block couponbtn"><span class="pull-left">{{ entry_couponhead }}</span></button>
+	<div class="inputgroup">
+		<div class="input-group">
+			<input type="text" name="coupon" class="form-control" placeholder="Coupon Code">
+			<span class="input-group-btn">
+				<button id="button-coupon" class="btn btn-primary" type="button"><i class="fa fa-check"></i></button>
+			</span>
+		</div>
+	</div>
+</div>
+<script type="text/javascript"><!--
+$('#button-coupon').on('click',function(){
+	$.ajax({
+		url: 'index.php?route=extension/coupon/coupon',
+		type: 'post',
+		data: 'coupon=' + encodeURIComponent($('input[name=\'coupon\']').val()),
+		dataType: 'json',
+		beforeSend: function() {
+			$('#button-coupon').button('loading');
+		},
+		complete: function() {
+			$('#button-coupon').button('reset');
+		},
+		success: function(json) {
+			$('.text-danger').remove();
+			$('.alert').remove();
+
+			if (json['error']){
+				$('#coupon input[name=\'coupon\']').after('<div class="text-danger"> ' + json['error'] + '</div>');
+				$('#coupon input[name=\'coupon\']').parent().addClass('has-error');
+			}
+
+			if (json['redirect']) {
+				cartload();
+			}
+		}
+	});
+});
+//--></script>

@@ -1,0 +1,214 @@
+<div class="row block-data">
+    <div class="col-xs-6 required">
+        <div class="form-group">
+            <label for="main-model">{{ modal.fields.model }}</label>
+            <input type="text" class="form-control " name="model" id="main-model" placeholder="{{ modal.fields.model }}" value="{{ item.model }}" />
+        </div>
+    </div>
+    <div class="col-xs-6">
+        <div class="form-group">
+            <label for="main-sku">{{ modal.fields.sku }}</label>
+            <input type="text" class="form-control " name="sku" id="main-sku" placeholder="{{ modal.fields.sku }}" value="{{ item.sku }}" />
+        </div>
+    </div>
+
+    <div class="col-xs-6">
+        <div class="form-group">
+            <label for="main-upc">{{ modal.fields.upc }}</label>
+            <input type="text" class="form-control " name="upc" id="main-upc" placeholder="{{ modal.fields.upc }}" value="{{ item.upc }}" />
+        </div>
+    </div>
+    <div class="col-xs-6">
+        <div class="form-group">
+            <label for="main-ean">{{ modal.fields.ean }}</label>
+            <input type="text" class="form-control" name="ean" id="main-ean" placeholder="{{ modal.fields.ean }}" value="{{ item.ean }}" />
+        </div>
+    </div>
+
+    <div class="col-xs-6">
+        <div class="form-group">
+            <label for="main-jan">{{ modal.fields.jan }}</label>
+            <input type="text" class="form-control" name="jan" id="main-jan" placeholder="{{ modal.fields.jan }}" value="{{ item.jan }}" />
+        </div>
+    </div>
+
+    <div class="col-xs-6">
+        <div class="form-group">
+            <label for="main-isbn">{{ modal.fields.isbn }}</label>
+            <input type="text" class="form-control" name="isbn" id="main-isbn" placeholder="{{ modal.fields.isbn }}" value="{{ item.isbn }}" />
+        </div>
+    </div>
+
+    <div class="col-xs-6">
+        <div class="form-group">
+            <label for="main-mpn">{{ modal.fields.mpn }}</label>
+            <input type="text" class="form-control" name="mpn" id="main-mpn" placeholder="{{ modal.fields.mpn }}" value="{{ item.mpn }}" />
+        </div>
+    </div>
+
+    <div class="col-xs-12">
+        <div class="form-group">
+            <label for="main-location">{{ modal.fields.location }}</label>
+            <input type="text" class="form-control" name="location" id="main-location" placeholder="{{ modal.fields.location }}" value="{{ item.location }}" />
+        </div>
+    </div>
+
+    <div class="col-xs-6">
+        <div class="form-group required">
+            <label for="main-price">{{ modal.fields.price }}</label>
+            <input type="text" class="form-control" name="price" id="main-price" placeholder="{{ modal.fields.price }}" value="{{ item.price }}" />
+        </div>
+    </div>
+
+    <div class="col-xs-6">
+        <div class="form-group">
+            <label for="main-tax-class-id">{{ modal.fields.tax_class_id }}</label>
+            <select class="form-control" name="tax_class_id" id="main-tax-class-id">
+                {% for tax in dict.tax %}
+                    <option value="{{ tax.tax_class_id }}" {% if tax.tax_class_id == item.tax_class_id %} SELECTED {% endif %}>{{ tax.title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="col-xs-6">
+        <div class="form-group">
+            <label for="main-quantity">{{ modal.fields.quantity }}</label>
+            <input type="text" class="form-control" name="quantity" id="main-quantity" placeholder="{{ modal.fields.quantity }}" value="{{ item.quantity }}" />
+        </div>
+    </div>
+    <div class="col-xs-6">
+        <div class="form-group">
+            <label for="main-subtract">{{ modal.fields.subtract }}</label>
+            <select class="form-control" name="subtract" id="main-subtract">
+                {% for subtract in dict.subtract %}
+                    <option value="{{ subtract.value }}" {% if subtract.value == item.subtract %} SELECTED {% endif %}>{{ subtract.title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="col-xs-6">
+        <div class="form-group required">
+            <label for="main-minimum">{{ modal.fields.minimum }}</label>
+            <input type="text" class="form-control" name="minimum" id="main-minimum" placeholder="{{ modal.fields.minimum }}" value="{{ item.minimum }}" />
+            <div class="alert alert-info mt-5">
+                {{ modal.notes.minimum }}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-6">
+        <div class="form-group">
+            <label for="main-stock-status-id">{{ modal.fields.stock_status_id }}</label>
+            <select class="form-control" name="stock_status_id" id="main-stock-status-id">
+                {% for stock_status in dict.stock_status %}
+                    <option value="{{ stock_status.stock_status_id }}" {% if stock_status.stock_status_id == item.stock_status_id %} SELECTED {% endif %}>{{ stock_status.name }}</option>
+                {% endfor %}
+            </select>
+            <div class="alert alert-info mt-5">
+                {{ modal.notes.stock_status_id }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row block-data">
+    <div class="col-xs-6">
+        <div class="form-group">
+            <label for="main-shipping">{{ modal.fields.shipping }}</label>
+            <select class="form-control" name="shipping" id="main-shipping">
+                {% for shipping in dict.shipping %}
+                    <option value="{{ shipping.value }}" {% if shipping.value == item.shipping %} SELECTED {% endif %}>{{ shipping.title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="col-xs-6">
+        <div class="form-group">
+            <label for="main-date-available">{{ modal.fields.date_available }}</label>
+            <div class="input-group date">
+                <input type="text" name="date_available" id="main-date-available" data-date-format="YYYY-MM-DD" class="form-control" value="{{ item.date_available }}" />
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-3">
+        <div class="form-group">
+            <label for="main-length">{{ modal.fields.length }}</label>
+            <input type="text" class="form-control" name="length" id="main-length" placeholder="{{ modal.fields.length }}" value="{{ item.length }}" />
+        </div>
+    </div>
+    <div class="col-xs-3">
+        <div class="form-group">
+            <label for="main-width">{{ modal.fields.width }}</label>
+            <input type="text" class="form-control" name="width" id="main-width" placeholder="{{ modal.fields.width }}" value="{{ item.width }}" />
+        </div>
+    </div>
+    <div class="col-xs-3">
+        <div class="form-group">
+            <label for="main-height">{{ modal.fields.height }}</label>
+            <input type="text" class="form-control" name="height" id="main-height" placeholder="{{ modal.fields.height }}" value="{{ item.height }}" />
+        </div>
+    </div>
+
+    <div class="col-xs-3">
+        <div class="form-group">
+            <label for="main-length-class-id">{{ modal.fields.length_class_id }}</label>
+            <select class="form-control" name="length_class_id" id="main-length-class-id">
+                {% for length in dict.length_class %}
+                    <option value="{{ length.length_class_id }}" {% if length.length_class_id == item.length_class_id %} SELECTED {% endif %}>{{ length.title }} ({{ length.unit }})</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="col-xs-6">
+        <div class="form-group">
+            <label for="main-weight">{{ modal.fields.weight }}</label>
+            <input type="text" class="form-control" name="weight" id="main-weight" placeholder="{{ modal.fields.weight }}" value="{{ item.weight }}" />
+        </div>
+    </div>
+
+    <div class="col-xs-6">
+        <div class="form-group">
+            <label for="main-weight-class-id">{{ modal.fields.weight_class_id }}</label>
+            <select class="form-control" name="weight_class_id" id="main-weight-class-id">
+                {% for weight in dict.weight_class %}
+                    <option value="{{ weight.weight_class_id }}" {% if weight.weight_class_id == item.weight_class_id %} SELECTED {% endif %}>{{ weight.title }} ({{ weight.unit }})</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="col-xs-6">
+        <div class="form-group">
+            <label for="main-status">{{ modal.fields.status }}</label>
+            <select class="form-control" name="status" id="main-status">
+                {% for status in dict.status %}
+                    <option value="{{ status.value }}" {% if status.value == item.status %} SELECTED {% endif %}>{{ status.title }})</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="col-xs-6">
+        <div class="form-group">
+            <label for="main-weight">{{ modal.fields.sort_order }}</label>
+            <input type="text" class="form-control" name="sort_order" id="main-sort-order" placeholder="{{ modal.fields.sort_order }}" value="{{ item.sort_order }}" />
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+

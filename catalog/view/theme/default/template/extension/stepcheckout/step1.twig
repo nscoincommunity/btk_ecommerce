@@ -1,0 +1,71 @@
+<div class="row steps_head">
+	<div class="col-xs-4 step_bars">
+		<div class="step_circle icon_active">
+			<i class="fa fa-user"></i>
+			<p class="hidden-xs">{{ text_account }}</p>
+		</div>
+	</div>
+	<div class="col-xs-4 step_bars">
+		<div class="step_circle ">
+			<i class="fa fa-send"></i>
+			<p class="hidden-xs">{{ text_address }}</p>
+		</div>
+	</div>
+	<div class="col-xs-4">
+		<div class="step_circle">
+			<i class="fa fa-credit-card"></i>
+			<p class="hidden-xs">{{ text_payment }}</p>
+		</div>
+	</div>
+</div>
+<div class="row steps_body">
+	<div class="loader"><div class="spin"></div></div>
+	<div  {% if cart_status %} class="col-sm-8" {% else %} class="col-sm-12" {% endif %}>
+		<div class="step1">
+			<div class="column1">
+				<ul class="nav nav-pills nav-stacked">
+				  <li class="tabheading">
+						{{ text_account }}
+				  </li>
+				  
+				  <li {% if stepcheckout_login %} class="hide"{% endif %}{% if not stepcheckout_displaypanel %} class="active" {% endif %}>
+					<a href="#tab_login" data-toggle="pill"> {{ text_login }} </a>
+				  </li>
+				   <li {% if stepcheckout_register %}class="hide"{% endif %}{% if stepcheckout_displaypanel==2 %} class="active" {% endif %}>
+					<a href="#tab_register" data-toggle="pill">
+						{{ text_register }}
+					</a>
+				  </li>
+				
+				  <li {% if stepcheckout_guest %}class="hide"{% endif %}{% if stepcheckout_displaypanel==1 %} class="active" {% endif %}>
+					<a href="#tab_guest" data-toggle="pill">
+						{{ text_guest }}
+					</a>
+				  </li>
+				</ul>
+			</div>
+			<div class="column2">
+				<div class="tab-content">
+					<div class="tab-pane {% if not stepcheckout_displaypanel %} active {% endif %}" id="tab_login">
+						{{ login }}
+					</div>
+					<div class="tab-pane {% if stepcheckout_displaypanel==2 %} active {% endif %}" id="tab_register">
+						<div id="stepcheckout-register">{{ register }}</div>
+					</div>
+					<div class="tab-pane {% if stepcheckout_displaypanel==1 %} active {% endif %}" id="tab_guest">
+						{{ guest }}
+					</div>
+				</div>
+				{{ wlogin }}
+			</div>
+		</div>
+	</div>
+	{% if cart_status %}
+	<div id="cartload" class="col-sm-4"></div>
+	{% endif %}
+</div>
+{% if cart_status %}
+<script type="text/javascript"><!--
+cartload();
+//--></script>
+{% endif %}

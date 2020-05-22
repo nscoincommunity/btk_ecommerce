@@ -1,0 +1,31 @@
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <select name="attribute" class="form-control select2" data-multiple="1">
+                        {% for attr in attributes %}
+                            <option value="{{ attr.attribute_id }}" {% if attr.attribute_id == attribute_id %} selected {% endif %}>{{ attr.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            {% for language in languages %}
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon" title="{{ language.name }}"><img src="language/{{ language.code }}/{{ language.code }}.png"/>&nbsp</span>
+                            <input type="text" class="form-control" data-multiple="1" name="attribute_text.{{ language.language_id }}" value="{% if attribute is not null %}{{ attribute[language.language_id] }}{% endif %}" />
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+            <div class="col-xs-12">
+                <button type="button" class="btn btn-danger btn-xs attribute-remove pull-right"><i class="fa fa-trash-o" aria-hidden="true"></i> {{ edit.buttons.remove }}</button>
+            </div>
+        </div>
+    </div>
+</div>

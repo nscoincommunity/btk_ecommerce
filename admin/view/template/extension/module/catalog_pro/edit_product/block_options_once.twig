@@ -1,0 +1,64 @@
+
+    <tr>
+        <td>
+            <select class="form-control input-sm select2" name="values.option.{{ loop.index }}.{{ product_option_id }}">
+                {% for v in option.values %}
+                    <option value="{{ v['option_value_id'] }}" {% if v['option_value_id'] == child['option_value_id'] %} selected {% endif %}>{{ v['name'] }}</option>
+                {% endfor %}
+            </select>
+        </td>
+        <td>
+            <input type="text" class="form-control input-sm" name="values.quantity.{{ loop.index }}.{{ product_option_id }}" placeholder="{{ modal.fields.option_quantity }}" value="{{ child['quantity'] }}" />
+        </td>
+        <td>
+            <select class="form-control input-sm" name="values.substract.{{ loop.index }}.{{ product_option_id }}">
+                <option value="0" {% if(child['substract'] == 0) %} selected {% endif %}>{{ modal.text.no }}</option>
+                <option value="1" {% if(child['substract'] == 1) %} selected {% endif %}>{{ modal.text.yes }}</option>
+            </select>
+        </td>
+        <td>
+            <div class="row">
+                <div class="col-xs-12 mb-5">
+                    <select class="form-control input-sm" name="values.price_prefix.{{ loop.index }}.{{ product_option_id }}">
+                        <option value="-" {% if(child['price_prefix'] == '-') %} selected {% endif %}>-</option>
+                        <option value="+" {% if(child['price_prefix'] == '+') %} selected {% endif %}>+</option>
+                    </select>
+                </div>
+
+                <div class="col-xs-12">
+                    <input type="text" class="form-control input-sm" name="values.price.{{ loop.index }}.{{ product_option_id }}" placeholder="{{ modal.fields.option_price }}" value="{{ child['price'] }}" />
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="row">
+                <div class="col-xs-12 mb-5">
+                    <select class="form-control input-sm" name="values.points_prefix.{{ loop.index }}.{{ product_option_id }}">
+                        <option value="-" {% if(child['points_prefix'] == '-') %} selected {% endif %}>-</option>
+                        <option value="+" {% if(child['points_prefix'] == '+') %} selected {% endif %}>+</option>
+                    </select>
+                </div>
+
+                <div class="col-xs-12">
+                    <input type="text" class="form-control input-sm" name="values.points.{{ loop.index }}.{{ product_option_id }}" placeholder="{{ modal.fields.option_points }}" value="{{ child['points'] }}" />
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="row">
+                <div class="col-xs-12 mb-5">
+                    <select class="form-control input-sm" name="values.weight_prefix.{{ loop.index }}.{{ product_option_id }}">
+                        <option value="-" {% if(child['weight_prefix'] == '-') %} selected {% endif %}>-</option>
+                        <option value="+" {% if(child['weight_prefix'] == '+') %} selected {% endif %}>+</option>
+                    </select>
+                </div>
+
+                <div class="col-xs-12">
+                    <input type="text" class="form-control input-sm" name="values.weight.{{ loop.index }}.{{ product_option_id }}" placeholder="{{ modal.fields.option_weight }}" value="{{ child['weight'] }}" />
+                </div>
+            </div>
+        </td>
+        <td>
+            <button type="button" class="btn btn-xs btn-danger option-remove"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+        </td>
+    </tr>

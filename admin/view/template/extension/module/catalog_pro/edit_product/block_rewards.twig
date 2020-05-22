@@ -1,0 +1,37 @@
+<div class="rewards-data">
+
+    <div class="row">
+        <div class="col-xs-12">
+            <label>{{ modal.fields.points }}</label>
+            <input type="text" class="form-control" name="points" value="{{ item.points }}" />
+            <div class="alert alert-warning" style="margin-top: 3px">
+                <small>
+                    {{ modal.notes.points }}
+                </small>
+            </div>
+        </div>
+
+        <div class="col-xs-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>{{ modal.fields.discount_group }}</th>
+                        <th>{{ modal.fields.points_reward }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for group in groups %}
+                        <tr>
+                            <td>{{ group.name }}</td>
+                            <td>
+                                <input type="text" class="form-control" name="points_reward.{{ group.customer_group_id }}" value="{{ item.rewards[group.customer_group_id] }}" />
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</div>

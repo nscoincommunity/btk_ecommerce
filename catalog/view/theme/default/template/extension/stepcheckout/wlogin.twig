@@ -1,0 +1,23 @@
+{% if stepcheckout_fstatus or stepcheckout_gstatus or stepcheckout_lstatus %}
+<div class="orstring">OR</div>
+<div class="well well-sm social_login">
+	<h4 class="text-center">{{ sociallogin_heading }}</h4>
+	<div class="row">
+	{% if stepcheckout_fstatus %}
+		<div class="col-sm-4">
+			<a href="{{ flogin }}" class="btn btn-link btn-block icon fb">{{ ftext }}</a>
+		</div>
+		{% endif %}
+	{% if stepcheckout_gstatus %}
+		<div class="col-sm-4">
+			<a href="{{ authUrl }}" class="btn btn-link btn-block icon google">{{ gtext }}</a>
+		</div>
+		{% endif %}
+		{% if stepcheckout_lstatus %}
+		<div class="col-sm-4">
+			<a href="{{ lcallback }}" class="btn btn-link btn-block icon linkedin">{{ ltext }}</a>
+		</div>
+		{% endif %}
+	</div>
+</div>
+{% endif %}

@@ -1,0 +1,148 @@
+<div class="row steps_head">
+	<div class="col-xs-4 step_bars icon_done">
+		<div class="step_circle">
+			<i class="fa fa-user"></i>
+			<p class="hidden-xs">{{ text_account }}</p>
+		</div>
+	</div>
+	<div class="col-xs-4 step_bars">
+		<div class="step_circle icon_active">
+			<i class="fa fa-send"></i>
+			<p class="hidden-xs">{{ text_address }}</p>
+		</div>
+	</div>
+	<div class="col-xs-4">
+		<div class="step_circle">
+			<i class="fa fa-credit-card"></i>
+			<p class="hidden-xs">{{ text_payment }}</p>
+		</div>
+	</div>
+</div>
+<div id="secondsteps" class="row steps_body">
+	<div class="loader"><div class="spin"></div></div>
+	<div  {% if cart_status %} class="col-sm-8" {% else %} class="col-sm-12" {% endif %}>
+		<div class="step2">
+			<div class="well well-sm text-center {% if not shipping_status %} hide {% endif %}">  
+				<label for="sameaddress">
+				<input type="checkbox" name="address_same" {% if sameaddress %} checked="checked" {% endif %} value="1" id="sameaddress">{{ text_same_delivery }}</label>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					{% if payment_address %}
+					<div class="addresscard">
+						<p class="addcardhead">{{ text_paymentadd }} <span class="pull-right"><i class="fa fa-credit-card"></i></span></p>
+						<div class="addcardbody">
+							{{ payment_address['firstname']~' '~payment_address['lastname'] }}<br />
+							{{ payment_address['company'] }}
+							<br>
+							{{ telephone }}
+							<br>
+							{{ payment_address['address_1'] }}, {{ payment_address['city'] }}, <br/> {{ payment_address['zone'] }}, {{ payment_address['country'] }}
+							<input type="hidden" name="payment_address_id" value="{{ payment_address['address_id'] }}"/>
+						</div>
+						<p class="addcardfooter"><a class="addnewadd" rel="payment_address"><i class="fa fa-edit"></i> {{ text_edit_address }}</a></p>
+					</div>
+					{% else %}
+					<div class="addresscard payment_address_add">
+						<p class="addcardhead changetitle">{{ text_paymentadd }} <span class="pull-right"><i class="fa fa-send"></i></span></p>
+						<div class="addcardbody addnewadd" rel="payment_address">
+							<i class="fa fa-plus"></i> {{ text_add }}
+						</div>
+					</div>
+					{% endif %}
+					{% if shipping_status %}
+					{% if shipping_address %}
+					 <div class="addresscard shipping_address_add">
+						<p class="addcardhead">{{ text_shippingadd }} <span class="pull-right"><i class="fa fa-credit-card"></i></span></p>
+						<div class="addcardbody">
+							{{ shipping_address['firstname']~' '~shipping_address['lastname'] }}<br />
+							{{ shipping_address['company'] }}
+							<br>
+							{{ telephone }}
+							<br>
+							{{ shipping_address['address_1'] }}, {{ shipping_address['city'] }}, <br/> {{ shipping_address['zone'] }}, {{ shipping_address['country'] }}
+							<input type="hidden" name="shipping_address_id" value="{{ payment_address['address_id'] }}"/>
+						</div>
+						<p class="addcardfooter"><a class="addnewadd" rel="shipping_address"><i class="fa fa-edit"></i> {{ text_edit_address }}</a></p>
+					 </div>
+					{% else %}
+					<div class="addresscard shipping_address_add">
+						<p class="addcardhead">{{ text_shippingadd }} <span class="pull-right"><i class="fa fa-send"></i></span></p>
+						<div class="addcardbody addnewadd" rel="shipping_address">
+							<i class="fa fa-plus"></i> {{ text_add }}
+						</div>
+					</div>
+					{% endif %}
+					{% endif %}
+					<div id="loadaddress"></div>
+				</div>
+				<div id="shipping_methods" class="col-sm-6 paymentmenthods">
+					<div id="loadshipping"></div>
+					<p><strong>{{ text_comments }}</strong></p>
+						{% if stepcheckout_comment %}
+					<p>
+					  <textarea name="comment" rows="8" class="form-control" placeholder="{{ text_comment_placeholder }}">{{ comment }}</textarea>
+					</p>
+					{% endif %}
+					<label for="termconditoin">
+						{% if agree %}
+							<input type="checkbox" name="agree" value="1" checked="checked" />
+						{% else %}
+							<input type="checkbox" name="agree" value="1" />
+						{% endif %} &nbsp; &nbsp;{{ text_agree }}
+					</label>
+					<button id="button-shipping-method" class="save_continue btn btn-primary btn-block">{{ button_save_continue }}</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% if cart_status %}
+	<div id="cartload" class="col-sm-4"></div>
+	{% endif %}
+</div>
+<script type="text/javascript"><!--
+$('input[name="address_same"]').on('click',function(){
+	shipping_address = $('input[name="address_same"]:checked').attr('value');
+	if(shipping_address==1){
+		$('.shipping_address_add').addClass('hide');
+	}else{
+		$('.shipping_address_add').removeClass('hide');
+	}
+	autoselectaddress();
+});
+
+var address_same = $('input[name="address_same"]:checked').attr('value');
+if(address_same==1){
+	$('.shipping_address_add').addClass('hide');
+}else{
+	$('.shipping_address_add').removeClass('hide');
+}
+
+$('.addnewadd').on('click',function(){
+
+	var address_type = $(this).attr('rel');
+	var shipping_address = $('input[name="address_same"]:checked').attr('value');
+  	$.ajax({
+		url: 'index.php?route=extension/address&address_type='+address_type+'&shipping_address='+shipping_address,
+		dataType: 'html',
+		beforeSend: function() {
+			$('#button-register').button('loading');
+		},
+		success: function(html){
+			$('#loadaddress').html(html);
+		},
+		error: function(xhr, ajaxOptions, thrownError) {
+			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+	});
+});
+{% if address_id and not sessionmissng %}
+autoselectaddress();
+{% endif %}
+{% if shipping_status %}
+loadshippingmethod();
+{% endif %}
+{% if cart_status %}
+cartload();
+{% endif %}
+//--></script>

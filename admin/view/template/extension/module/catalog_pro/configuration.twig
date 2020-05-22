@@ -1,0 +1,148 @@
+{{ header }}{{ column_left }}
+
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <button type="submit" id="button-save" form="form-setting" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary">
+                    <i class="fa fa-save"></i></button>
+                <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+            </div>
+            <h1>{{ heading_title }}</h1>
+            <ul class="breadcrumb">
+                {% for breadcrumb in breadcrumbs %}
+                    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {# error list #}
+        {% if error_warning %}
+            <div class="alert alert-danger alert-dismissible">
+                <i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+
+        {# success block #}
+        {% if success %}
+            <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-setting" class="form-horizontal">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab-columns" data-toggle="tab">{{ tab_columns }}</a></li>
+
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab-columns">
+                            <table class="table table-sortable" id="list">
+                                <thead>
+                                <tr>
+                                    <th width="60%">
+                                        {{ table_name }}
+                                    </th>
+                                    <th>
+                                        {{ table_visible }}
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for column in columns %}
+                                    <tr>
+                                        <td>
+                                            <i class="fa fa-arrows move" aria-hidden="true"></i>&nbsp;{{ column.caption }}
+                                        </td>
+                                        <td>
+                                            <select name="{{ column.name }}" class="form-control">
+                                                <option value="0" {% if column.value == 0 %} SELECTED {% endif %}>{{ visible_no }}</option>
+                                                <option value="1" {% if column.value == 1 %} SELECTED {% endif %}>{{ visible_yes }}</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+
+                            <hr/>
+                            <table class="table table-sortable">
+                                <thead>
+                                <tr>
+                                    <th width="60%">
+                                        {{ table_name }}
+                                    </th>
+                                    <th>
+                                        {{ table_value }}
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            {{ text_limit }}
+                                        </td>
+                                        <td>
+                                            <select name="limit" class="form-control">
+                                                {% for l in limit_rows %}
+                                                    <option value="{{ l }}" {% if limit == l %} SELECTED {% endif %}>{{ l }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/admin/view/javascript/catalog_pro.js"></script>
+
+    {#<link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">#}
+    {#<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" async></script>#}
+
+    {#<script>#}
+      {#var editor;#}
+      {#var columns = {{ columns }};#}
+      {#$(document).ready(function () {#}
+        {#//#}
+        {#// // Activate an inline edit on click of a table cell#}
+        {#// $('#example').on('click', 'tbody td:not(:first-child)', function (e) {#}
+        {#//   editor.inline(this, {#}
+        {#//     onBlur: 'submit'#}
+        {#//   });#}
+        {#// });#}
+
+        {#$('#list').DataTable({#}
+          {#data: columns,#}
+          {#columns: [#}
+            {#{title: "Caption", data: "caption"},#}
+            {#{title: "Name", data: "name"},#}
+          {#],#}
+          {#order: [0, 'asc']#}
+        {#});#}
+      {#});#}
+    {#</script>#}
+
+    <script>
+        $(document).ready(function () {
+          $('.table-sortable tbody').sortable({
+            handle: 'i.move',
+            items: ':not(.disabled)'
+          }).bind('sortupdate', function () {
+
+          });
+        });
+    </script>
+
+</div>
+{{ footer }} 

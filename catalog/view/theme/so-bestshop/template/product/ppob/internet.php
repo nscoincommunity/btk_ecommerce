@@ -1,0 +1,507 @@
+{{ header }}
+
+{#====  Loader breadcrumbs ==== #}
+{# {% include theme_directory~'/template/soconfig/breadcrumbs.twig' %} #}
+
+{#====  Variables url parameter ==== #}
+{# {% if url_asidePosition %}{% set col_position = url_asidePosition %}
+{% else %}{% set col_position = soconfig.get_settings('catalog_col_position') %}{% endif %}
+
+{% if url_asideType %} {% set col_canvas = url_asideType %}
+{% else %}{% set col_canvas = soconfig.get_settings('catalog_col_type') %}{% endif %}
+
+{% if url_productGallery %} {% set productGallery = url_productGallery %}
+{% else %}{% set productGallery = soconfig.get_settings('thumbnails_position') %}{% endif %}
+
+{% if url_sidebarsticky %} {% set sidebar_sticky = url_sidebarsticky %}
+{% else %} {% set sidebar_sticky = soconfig.get_settings('catalog_sidebar_sticky') %}{% endif %}
+
+{% set desktop_canvas = col_canvas =='off_canvas' ? 'desktop-offcanvas' : '' %} #}
+
+<style>
+	.wrapper-ppobs{
+		margin-top: 15px;
+	}
+	.pulsa-box{
+		border-radius: 5px;
+	}
+	.header-box{
+		background: white;
+		padding: 10px;
+		border-top-left-radius: 5px;
+		border-top-right-radius: 5px;
+		border: 2px solid #f5f5f5;
+	}
+	.header-box-active{
+		background: #F91100;
+		padding: 10px;
+		border-top-left-radius: 5px;
+		border-top-right-radius: 5px;
+		border: 2px solid #F91100;
+	}
+	.bottom-box{
+		background-color: white;
+		color: ;
+		border: 2px solid #f5f5f5;
+		border-bottom-left-radius: 5px;
+		border-bottom-right-radius: 5px;
+		padding: 10px 10px 0 10px;
+	}
+	.bottom-box-active{
+		background-color: white;
+		border: 2px solid #F91100;
+		border-bottom-left-radius: 5px;
+		border-bottom-right-radius: 5px;
+		padding: 10px 10px 0 10px;
+	}
+	.text-header-box{
+		font-size: 16;
+	}
+	.text-description-box{
+		font-size: 14;
+		font-weight: bold;
+	}
+	.text-description-bottom{
+		border-top: 0;
+	}
+	.text-header-box-active{
+		color: white;
+		font-size: 16;
+	}
+	.text-description-box-active{
+		color: white;
+		font-size: 14;
+		font-weight: bold;
+	}
+	.text-description-bottom-active{
+		color: #F91100;
+	}
+	.nominal-box{
+		margin-top: 15px;
+
+	}
+</style>
+
+<div class="content-main container product-detail {{desktop_canvas}}">
+	<div class="wrapper-ppobs">
+		<h2>Nomor Telepon</h2>
+		<input type="number" name="telephone" value="{{ telephone }}" placeholder="{{ entry_telephone }}" id="input-handphone" class="form-control input-handphone" />
+		<br />
+		<h2>Nominal</h2>
+		<div class="col-md-3 nominal-box">
+			<a class="pulsa-box">
+				<div class="header-box-active grid-container">
+					<div class="row">
+						<div class="title-box col-xs-6">
+							<span class="text-header-box-active">25.000</span><br />
+							<span class="text-description-box-active">Rp 25.000</span>
+						</div>
+						<div class="image-provider col-xs-6">
+							<img width="auto" style="float: right" height="50" src="https://upload.wikimedia.org/wikipedia/id/5/55/XL_logo_2016.svg" />
+						</div>
+					</div>
+				</div>
+				<div class="bottom-box-active">
+					<h4 class="text-description-bottom-active">Masa aktif 35 hari</h4>
+				</div>
+			</a>
+		</div>
+		<div class="col-md-3 nominal-box">
+			<a class="pulsa-box">
+				<div class="header-box grid-container">
+					<div class="row">
+						<div class="title-box col-xs-6">
+							<span class="text-header-box">25.000</span><br />
+							<span class="text-description-box">Rp 25.000</span>
+						</div>
+						<div class="image-provider col-xs-6">
+							<img width="auto" style="float: right" height="50" src="https://upload.wikimedia.org/wikipedia/id/5/55/XL_logo_2016.svg" />
+						</div>
+					</div>
+				</div>
+				<div class="bottom-box">
+					<h4 class="text-description-bottom">Masa aktif 35 hari</h4>
+				</div>
+			</a>
+		</div>
+		<div class="col-md-3 nominal-box">
+			<a class="pulsa-box">
+				<div class="header-box grid-container">
+					<div class="row">
+						<div class="title-box col-xs-6">
+							<span class="text-header-box">25.000</span><br />
+							<span class="text-description-box">Rp 25.000</span>
+						</div>
+						<div class="image-provider col-xs-6">
+							<img width="auto" style="float: right" height="50" src="https://upload.wikimedia.org/wikipedia/id/5/55/XL_logo_2016.svg" />
+						</div>
+					</div>
+				</div>
+				<div class="bottom-box">
+					<h4 class="text-description-bottom">Masa aktif 35 hari</h4>
+				</div>
+			</a>
+		</div>
+		<div class="col-md-3 nominal-box">
+			<a class="pulsa-box">
+				<div class="header-box grid-container">
+					<div class="row">
+						<div class="title-box col-xs-6">
+							<span class="text-header-box">25.000</span><br />
+							<span class="text-description-box">Rp 25.000</span>
+						</div>
+						<div class="image-provider col-xs-6">
+							<img width="auto" style="float: right" height="50" src="https://upload.wikimedia.org/wikipedia/id/5/55/XL_logo_2016.svg" />
+						</div>
+					</div>
+				</div>
+				<div class="bottom-box">
+					<h4 class="text-description-bottom">Masa aktif 35 hari</h4>
+				</div>
+			</a>
+		</div>
+		<div class="col-md-3 nominal-box">
+			<a class="pulsa-box">
+				<div class="header-box grid-container">
+					<div class="row">
+						<div class="title-box col-xs-6">
+							<span class="text-header-box">25.000</span><br />
+							<span class="text-description-box">Rp 25.000</span>
+						</div>
+						<div class="image-provider col-xs-6">
+							<img width="auto" style="float: right" height="50" src="https://upload.wikimedia.org/wikipedia/id/5/55/XL_logo_2016.svg" />
+						</div>
+					</div>
+				</div>
+				<div class="bottom-box">
+					<h4 class="text-description-bottom">Masa aktif 35 hari</h4>
+				</div>
+			</a>
+		</div>
+		<div class="col-md-3 nominal-box">
+			<a class="pulsa-box">
+				<div class="header-box grid-container">
+					<div class="row">
+						<div class="title-box col-xs-6">
+							<span class="text-header-box">25.000</span><br />
+							<span class="text-description-box">Rp 25.000</span>
+						</div>
+						<div class="image-provider col-xs-6">
+							<img width="auto" style="float: right" height="50" src="https://upload.wikimedia.org/wikipedia/id/5/55/XL_logo_2016.svg" />
+						</div>
+					</div>
+				</div>
+				<div class="bottom-box">
+					<h4 class="text-description-bottom">Masa aktif 35 hari</h4>
+				</div>
+			</a>
+		</div>
+		<div class="col-md-3 nominal-box">
+			<a class="pulsa-box">
+				<div class="header-box grid-container">
+					<div class="row">
+						<div class="title-box col-xs-6">
+							<span class="text-header-box">25.000</span><br />
+							<span class="text-description-box">Rp 25.000</span>
+						</div>
+						<div class="image-provider col-xs-6">
+							<img width="auto" style="float: right" height="50" src="https://upload.wikimedia.org/wikipedia/id/5/55/XL_logo_2016.svg" />
+						</div>
+					</div>
+				</div>
+				<div class="bottom-box">
+					<h4 class="text-description-bottom">Masa aktif 35 hari</h4>
+				</div>
+			</a>
+		</div>
+		<div class="col-md-3 nominal-box">
+			<a class="pulsa-box">
+				<div class="header-box grid-container">
+					<div class="row">
+						<div class="title-box col-xs-6">
+							<span class="text-header-box">25.000</span><br />
+							<span class="text-description-box">Rp 25.000</span>
+						</div>
+						<div class="image-provider col-xs-6">
+							<img width="auto" style="float: right" height="50" src="https://upload.wikimedia.org/wikipedia/id/5/55/XL_logo_2016.svg" />
+						</div>
+					</div>
+				</div>
+				<div class="bottom-box">
+					<h4 class="text-description-bottom">Masa aktif 35 hari</h4>
+				</div>
+			</a>
+		</div>
+		<div class="col-md-3" style="float:right;margin-top:20px;;">
+			<div class="row">
+				<div class="col-md-6">
+					<h4>Total Harga</h4>
+				</div>
+				<div class="col-md-6" >
+					<h4 style="float:right;">Rp 25.000</h4>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<button type="button" class="btn btn-block">Beli</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</div>
+
+<script type="text/javascript"><!--
+$('#button-cart').on('click', function() {
+
+	$.ajax({
+		url: 'index.php?route=extension/soconfig/cart/add',
+		type: 'post',
+		data: $('#product input[type=\'text\'], #product input[type=\'hidden\'], #product input[type=\'radio\']:checked, #product input[type=\'checkbox\']:checked, #product select, #product textarea'),
+		dataType: 'json',
+		beforeSend: function() {
+			$('#button-cart').button('loading');
+		},
+		complete: function() {
+			$('#button-cart').button('reset');
+		},
+		success: function(json) {
+			$('.alert').remove();
+			$('.text-danger').remove();
+			$('.form-group').removeClass('has-error');
+			if (json['error']) {
+				if (json['error']['option']) {
+					for (i in json['error']['option']) {
+						var element = $('#input-option' + i.replace('_', '-'));
+
+						if (element.parent().hasClass('input-group')) {
+							element.parent().after('<div class="text-danger">' + json['error']['option'][i] + '</div>');
+						} else {
+							element.after('<div class="text-danger">' + json['error']['option'][i] + '</div>');
+						}
+					}
+				}
+
+				if (json['error']['recurring']) {
+					$('select[name=\'recurring_id\']').after('<div class="text-danger">' + json['error']['recurring'] + '</div>');
+				}
+
+				// Highlight any found errors
+				$('.text-danger').parent().addClass('has-error');
+			}
+
+			if (json['success']) {
+				$('.text-danger').remove();
+				$('#wrapper').before('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="fa fa-close close" data-dismiss="alert"></button></div>');
+				$('#cart  .total-shopping-cart ').html(json['total'] );
+				$('#cart > ul').load('index.php?route=common/cart/info ul li');
+
+				timer = setTimeout(function () {
+					$('.alert').addClass('fadeOut');
+				}, 4000);
+				$('.so-groups-sticky .popup-mycart .popup-content').load('index.php?route=extension/module/so_tools/info .popup-content .cart-header');
+			}
+
+
+		},
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+	});
+});
+
+//--></script>
+
+<script type="text/javascript"><!--
+$('.date').datetimepicker({
+	language: document.cookie.match(new RegExp('language=([^;]+)'))[1],
+	pickTime: false
+});
+
+$('.datetime').datetimepicker({
+	language: document.cookie.match(new RegExp('language=([^;]+)'))[1],
+	pickDate: true,
+	pickTime: true
+});
+
+$('.time').datetimepicker({
+	language: document.cookie.match(new RegExp('language=([^;]+)'))[1],
+	pickDate: false
+});
+
+$('button[id^=\'button-upload\']').on('click', function() {
+	var node = this;
+
+	$('#form-upload').remove();
+
+	$('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" /></form>');
+
+	$('#form-upload input[name=\'file\']').trigger('click');
+
+	if (typeof timer != 'undefined') {
+		clearInterval(timer);
+	}
+
+	timer = setInterval(function() {
+		if ($('#form-upload input[name=\'file\']').val() != '') {
+			clearInterval(timer);
+
+			$.ajax({
+				url: 'index.php?route=tool/upload',
+				type: 'post',
+				dataType: 'json',
+				data: new FormData($('#form-upload')[0]),
+				cache: false,
+				contentType: false,
+				processData: false,
+				beforeSend: function() {
+					$(node).button('loading');
+				},
+				complete: function() {
+					$(node).button('reset');
+				},
+				success: function(json) {
+					$('.text-danger').remove();
+
+					if (json['error']) {
+						$(node).parent().find('input').after('<div class="text-danger">' + json['error'] + '</div>');
+					}
+
+					if (json['success']) {
+						alert(json['success']);
+
+						$(node).parent().find('input').val(json['code']);
+					}
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+			});
+		}
+	}, 500);
+});
+//--></script>
+<script type="text/javascript"><!--
+$('#review').delegate('.pagination a', 'click', function(e) {
+    e.preventDefault();
+
+    $('#review').fadeOut('slow');
+    $('#review').load(this.href);
+    $('#review').fadeIn('slow');
+});
+
+$('#review').load('index.php?route=product/product/review&product_id={{ product_id }}');
+
+$('#button-review').on('click', function() {
+	$.ajax({
+		url: 'index.php?route=product/product/write&product_id={{ product_id }}',
+		type: 'post',
+		dataType: 'json',
+		data: $("#form-review").serialize(),
+		beforeSend: function() {
+			$('#button-review').button('loading');
+		},
+		complete: function() {
+			$('#button-review').button('reset');
+		},
+		success: function(json) {
+			$('.alert-dismissible').remove();
+
+			if (json['error']) {
+				$('#review').after('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '</div>');
+			}
+
+			if (json['success']) {
+				$('#review').after('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + '</div>');
+
+				$('input[name=\'name\']').val('');
+				$('textarea[name=\'text\']').val('');
+				$('input[name=\'rating\']:checked').prop('checked', false);
+			}
+		}
+	});
+});
+
+//--></script>
+
+
+
+<script type="text/javascript"><!--
+	$(document).ready(function() {
+
+		// Initialize the sticky scrolling on an item
+		sidebar_sticky = '{{sidebar_sticky}}';
+
+		if(sidebar_sticky=='left'){
+			$(".left_column").stick_in_parent({
+			    offset_top: 10,
+			    bottoming   : true
+			});
+		}else if (sidebar_sticky=='right'){
+			$(".right_column").stick_in_parent({
+			    offset_top: 10,
+			    bottoming   : true
+			});
+		}else if (sidebar_sticky=='all'){
+			$(".content-aside").stick_in_parent({
+			    offset_top: 10,
+			    bottoming   : true
+			});
+		}
+
+
+		$("#thumb-slider .image-additional").each(function() {
+			$(this).find("[data-index='0']").addClass('active');
+		});
+
+		$('.product-options li.radio').click(function(){
+			$(this).addClass(function() {
+				if($(this).hasClass("active")) return "";
+				return "active";
+			});
+
+			$(this).siblings("li").removeClass("active");
+			$(this).parent().find('.selected-option').html('<span class="label label-success">'+ $(this).find('img').data('original-title') +'</span>');
+		})
+
+		$('.thumb-video').magnificPopup({
+		  type: 'iframe',
+		  iframe: {
+			patterns: {
+			   youtube: {
+				  index: 'youtube.com/', // String that detects type of video (in this case YouTube). Simply via url.indexOf(index).
+				  id: 'v=', // String that splits URL in a two parts, second part should be %id%
+				  src: '//www.youtube.com/embed/%id%?autoplay=1' // URL that will be set as a source for iframe.
+					},
+				}
+			}
+		});
+	});
+//--></script>
+
+
+<script type="text/javascript">
+var ajax_price = function() {
+	$.ajax({
+		type: 'POST',
+		url: 'index.php?route=extension/soconfig/liveprice/index',
+		data: $('.product-detail input[type=\'text\'], .product-detail input[type=\'hidden\'], .product-detail input[type=\'radio\']:checked, .product-detail input[type=\'checkbox\']:checked, .product-detail select, .product-detail textarea'),
+		dataType: 'json',
+			success: function(json) {
+			if (json.success) {
+				change_price('#price-special', json.new_price.special);
+				change_price('#price-tax', json.new_price.tax);
+				change_price('#price-old', json.new_price.price);
+			}
+		}
+	});
+}
+
+var change_price = function(id, new_price) {$(id).html(new_price);}
+$('.product-detail input[type=\'text\'], .product-detail input[type=\'hidden\'], .product-detail input[type=\'radio\'], .product-detail input[type=\'checkbox\'], .product-detail select, .product-detail textarea, .product-detail input[name=\'quantity\']').on('change', function() {
+	ajax_price();
+});
+</script>
+
+{{ footer }}

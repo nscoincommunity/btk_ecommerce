@@ -1,0 +1,122 @@
+<div class="cartitems well">		
+{% for product in products %}
+<div class="media">
+{% if stepcheckout_quantity %}
+	<button rel="{{ product['cart_id'] }}" class="removeitem btn btn-link"><i class="fa fa-trash"></i></button>
+{% endif %}
+	<div class="media-body">
+		{% if product.thumb and stepcheckout_productimage %}
+          <a class="pull-left" href="{{ product['href'] }}"><img src="{{ product['thumb'] }}" alt="{{ product['name'] }}" title="{{ product['name'] }}" class="img-thumbnail" /></a>
+       {% endif %}
+		<h4 class="media-heading">
+			<a href="{{ product['href'] }}">{{ product['name'] }}</a>
+                  {% if not product['stock'] %}
+                  <span class="text-danger">***</span>
+                 {% endif %}
+                 {% if not product['option'] %}
+                  {% for option in product.option %} 
+                  <br />
+                  <small>{{ option['name'] }}: {{ option['value'] }}</small>
+                  {% endfor %}
+                {% endif %}
+                  {% if product.reward %}
+                  <br />
+                  <small>{{ product['reward'] }}</small>
+                  {% endif %}
+                 {% if product.recurring %}
+                  <br />
+                  <span class="label label-info">{{ text_recurring_item }}</span> <small>{{ product['recurring'] }}</small>
+           {% endif %}
+		</h4>
+		<!--<span class="media-heading">{{ column_model }}: {{ product['model'] }}</span>-->
+		<div id="{{ product['cart_id'] }}" class="input-group" style="max-width:130px;">
+			<!--<button rel="{{ product['cart_id'] }}" class="btn btn-primary minuscart">-</button> --> <input type="text" class="form-control quantity" name="quantity" value="{{ product['quantity'] }}" rel="{{ product['cart_id'] }}"  aria-describedby="qty"  onkeypress="return isNumberKey(event)" /> <!--<button rel="{{ product['cart_id'] }}" class="btn btn-primary pluscart">+</button>-->
+			<span class="input-group-addon" id="qty">{{ product['total'] }}</span>
+		</div>
+	</div>
+</div>
+{% endfor %}
+  {% for voucher in vouchers %}
+<div class="media">
+	<button class="removeitem btn btn-link"><i class="fa fa-trash"></i></button>
+	<div class="media-body">
+		<h4 class="media-heading">
+			{{ voucher['description'] }}
+        </h4>
+		<!--<span class="media-heading">{{ column_model }}: {{ product['model'] }}</span>-->
+		<div class="input-group" style="max-width:130px;">
+			<input type="text" class="form-control" name="quantity[{{ product['cart_id'] }}]" value="{{ product['quantity'] }}" aria-describedby="qty"  onkeypress="return isNumberKey(event)" />
+			<span class="input-group-addon" id="qty">{{ product['total'] }}</span>
+		</div>
+	</div>
+</div>
+{% endfor %}
+{{ coupon }}
+{{ voucher }}
+{{ reward }}
+<hr />
+ {% for total in totals %}
+<p><strong>{{ total['title'] }}:</strong> <span class="pull-right">{{ total['text'] }}</span></p>	
+{% endfor %}
+</div>
+<script>
+	function isNumberKey(evt){
+		var charCode = (evt.which) ? evt.which : event.keyCode
+		if (charCode > 31 && (charCode < 48 || charCode > 57))
+			return false;
+		return true;
+	}
+	$('.copuon button').on('click', function(){
+		$(this).parent().toggleClass('open');
+	});
+	
+	{% if stepcheckout_quantity %}
+	$('input[name="quantity"]').on('blur',function(){
+		cart_id = $(this).attr('rel');
+		var quantity = $(this).val();
+		$.ajax({
+			url: 'index.php?route=extension/cart/edit',
+			type: 'post',
+			data: 'key=' + cart_id + '&quantity=' + quantity,
+			dataType: 'json',
+			beforeSend: function(){
+				//$('#button-reward').button('loading');
+			},
+			complete: function(){
+				//$('#button-reward').button('reset');
+			},
+			success: function(json){
+				if (json['step1']) {
+					cartload();
+					$('#cart > button').html('<span id="cart-total"><i class="fa fa-shopping-cart"></i> ' + json['total'] + '</span>');
+					$('#cart > ul').load('index.php?route=common/cart/info ul li');
+				}
+			}
+		});
+	});
+	{% endif %}
+	
+	$('.removeitem').click(function(){
+		var cart_id = $(this).attr('rel');
+		var quantity = 0;
+		$.ajax({
+			url: 'index.php?route=extension/cart/edit',
+			type: 'post',
+			data: 'key=' + cart_id + '&quantity=' + quantity,
+			dataType: 'json',
+			beforeSend: function(){
+				//$('#button-reward').button('loading');
+			},
+			complete: function(){
+				//$('#button-reward').button('reset');
+			},
+			success: function(json){
+				if (json['step1']) {
+					cartload();
+					$('#cart > button').html('<span id="cart-total"><i class="fa fa-shopping-cart"></i> ' + json['total'] + '</span>');
+					$('#cart > ul').load('index.php?route=common/cart/info ul li');
+				}
+			}
+		});
+	});
+</script>

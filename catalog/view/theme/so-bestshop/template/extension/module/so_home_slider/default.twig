@@ -1,0 +1,364 @@
+{% set count_item = list|length %}
+
+<div class="module sohomepage-slider {{ class_suffix}}">
+    {% if disp_title_module %}
+      <h3 class="modtitle">{{ head_name}}</h3>
+    {% endif %}
+
+{% if pre_text %}
+  <div class="form-group">
+    {{ pre_text }}
+  </div>
+{% endif %}
+
+
+<div class="modcontent">
+    {% if list %}
+    <div id="sohomepage-slider{{ module}}">
+        <div class="so-homeslider sohomeslider-inner-{{ module}}">
+        {% for item in list %}
+            <div class="item">
+                <a href="{{ item.url}}" title="{{ item.title}}" target="{{ item_link_target}}">
+                    <img class="responsive" src="{{ item.thumb}}"  alt="{{ item.title}}" />
+                </a>
+                <div class="sohomeslider-description">
+                    {% if item.caption %} <h2>{{ item.caption }}</h2> {% endif %}
+                    {{ item.description}}
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+
+        <style>
+          .loader {
+            border: 16px solid #f3f3f3; /* Light grey */
+            border-top: 16px solid red; /* Blue */
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+          }
+
+            @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        </style>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.10.0/js/md5.min.js" type="text/javascript"></script>
+
+        <script type="text/javascript">
+
+        function Pdam(){
+          $(".loader").show();
+          $(".panel-pdam").hide();
+
+          now = Date.now();
+
+          var ref = $("#nomor-pdam").val()+now;
+
+          var commands = {
+              "commands"	: "inq-pasca",
+              "username"	: "081310902580",
+              "code"	: "PDAMKOTA.SURABAYA",
+              "hp"	: "1013225",
+              "ref_id"	: "091283746515",
+              "sign"      : "ab3fa60307051ffc390300e5cdfc3f35"
+          }
+
+          $.ajax({
+            url: "https://testpostpaid.mobilepulsa.net/api/v1/bill/check",
+            type: "post",
+            data: JSON.stringify(commands),
+            success: function (response) {
+                data = $.parseXML(response);
+                $xml = $( data ),
+                $title = $xml.find("message");
+                console.log('response data');
+                console.log(response);
+                $(".loader").hide();
+                $("#result-pdam").html("<h2>"+$title.text()+"</h2><br />").show();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+               console.log(textStatus, errorThrown);
+            }
+          });
+
+        }
+
+        function TelfonSpeedy(){
+          $(".loader").show();
+          $(".panel-telfonspeedy").hide();
+
+          now = Date.now();
+
+          var ref = $("#nomor-telfonspeedy").val()+now;
+
+          var commands = {
+              "commands"	: "inq-pasca",
+              "username"	: "081310902580",
+              "code"	    : "TELKOMPSTN",
+              "hp"        : $("#nomor-telfonspeedy").val(),
+              "ref_id"	  : ref,
+              "sign"	    : md5("081310902580"+"2565ce7e4420d8e3"+ref)
+          }
+
+          console.log(commands);
+
+          $.ajax({
+            url: "https://testpostpaid.mobilepulsa.net/api/v1/bill/check",
+            type: "post",
+            data: JSON.stringify(commands),
+            success: function (response) {
+              data = $.parseXML(response);
+              $xml = $( data ),
+              $title = $xml.find("message");
+              console.log('response data');
+              console.log(response);
+              $(".loader").hide();
+              $("#result-telfonspeedy").html("<h2>"+$title.text()+"</h2><br />").show();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+               console.log(textStatus, errorThrown);
+            }
+          });
+        }
+
+        function PaketData(){
+
+          $(".loader").show();
+          $(".panel-paketdata").hide();
+
+          now = Date.now();
+
+          var ref = $("#nomor-handphone-paketdata").val()+$("#content-operator-paketdata").val()+now;
+
+          var commands = {
+          	"commands"   : "topup",
+          	"username"   : "081310902580",
+          	"ref_id"     : ref,
+          	"hp"         : $("#nomor-handphone-topup").val(),
+          	"pulsa_code" : $("#content-operator").val(),
+          	"sign"       : md5("081310902580"+"2565ce7e4420d8e3"+ref)
+          }
+
+          $.ajax({
+            url: "https://testprepaid.mobilepulsa.net/v1/legacy/index",
+            type: "post",
+            data: JSON.stringify(commands),
+            success: function (response) {
+               if(typeof response.data !== undefined){
+                console.log('response data');
+                console.log(response);
+                $(".loader").hide();
+                $("#result-pulsa").html("<h2>"+response.data.message+"</h2><br />").show();
+                // setTimeout(function(){
+                //   location.reload();
+                // }, 1500);
+               }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+               console.log(textStatus, errorThrown);
+            }
+          });
+        }
+
+      function TopUp(){
+
+        $(".loader").show();
+        $(".panel-pulsa").hide();
+
+        now = Date.now();
+
+        var ref = $("#nomor-handphone-topup").val()+$("#content-operator").val()+now;
+
+        var commands = {
+        	"commands"   : "topup",
+        	"username"   : "081310902580",
+        	"ref_id"     : ref,
+        	"hp"         : $("#nomor-handphone-topup").val(),
+        	"pulsa_code" : $("#content-operator").val(),
+        	"sign"       : md5("081310902580"+"4575d1cc97c7aa33457"+ref)
+        }
+
+        // console.log(commands);
+        $.ajax({
+          url: "https://api.mobilepulsa.net/v1/legacy/index",
+          type: "post",
+          data: JSON.stringify(commands),
+          success: function (response) {
+             if(typeof response.data !== undefined){
+              console.log('response data');
+              console.log(response);
+              $(".loader").hide();
+              $("#result-pulsa").html("<h2>"+response.data.message+"</h2><br />").show();
+              // setTimeout(function(){
+              //   location.reload();
+              // }, 1500);
+             }
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+             console.log(textStatus, errorThrown);
+          }
+        });
+      }
+
+      function checkNumber(val, type){
+        var indosat = ["0814^","0815","0816","0855","0856","0857","0858"];
+        var xl      = ["0817","0818","0819","0859","0878","0877"];
+        var axis = ["0838","0837","0831","0832"];
+        var telkomsel = ["0812","0813","0852","0853","0821","0823","0822","0851"];
+        var smartfren = ["0881","0882","0883","0884","0885","0886","0887","0888"];
+        var three = ["0896","0897","0898","0899","0895"];
+        var operator = "";
+
+        var number=val;
+
+        var xl_matches = xl.filter(function(pattern) {
+          return new RegExp(pattern).test(number);
+        })
+
+        var indosat_matches = indosat.filter(function(pattern) {
+          return new RegExp(pattern).test(number);
+        })
+
+        var axis_matches = axis.filter(function(pattern) {
+          return new RegExp(pattern).test(number);
+        })
+
+        var telkomsel_matches = telkomsel.filter(function(pattern) {
+          return new RegExp(pattern).test(number);
+        })
+
+        var smartfren_matches = smartfren.filter(function(pattern) {
+          return new RegExp(pattern).test(number);
+        })
+
+        var three_matches = three.filter(function(pattern) {
+          return new RegExp(pattern).test(number);
+        })
+
+        if (indosat_matches.length > 0) {
+          var operator = (type == 'data') ? "indosat_paket_internet" : "Indosat";
+        } else if(xl_matches.length > 0){
+          var operator = (type == 'data') ? "xl_paket_internet" : "XL";
+        } else if(axis_matches.length > 0){
+          var operator = (type == 'data') ? "axis_paket_internet" : "Axis";
+        } else if(telkomsel_matches.length > 0){
+          var operator = (type == 'data') ? "telkomsel_paket_internet" : "Telkomsel";
+        } else if(smartfren_matches.length > 0){
+          var operator = (type == 'data') ? "smartfren_paket_internet" : "Smartfren";
+        } else if(three_matches.length > 0){
+          var operator = (type == 'data') ? "tri_paket_internet" : "Three";
+        } else {
+          $("#pulsa-selection").hide();
+          $("#pulsa-selection-pascabayar").hide();
+          $("#content-operator").html("");
+          $("#content-operator-pascabayar").html("");
+        }
+
+        var commands = {
+        	"commands" : "pricelist",
+        	"username" : "081310902580",
+        	"sign"     : "6f5a8032c90002f424439ca261f8e3cd",
+          "status"   : "active"
+        };
+
+        if(operator !== ""){
+          // console.log("https://testprepaid.mobilepulsa.net/v1/legacy/index/"+type+"/"+operator.toLowerCase());
+          $.ajax({
+            url: "https://testprepaid.mobilepulsa.net/v1/legacy/index/"+type+"/"+operator.toLowerCase(),
+            type: "post",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin":"*"
+            },
+            data: JSON.stringify(commands),
+            success: function (response) {
+               if(typeof response.data !== undefined){
+               console.log('response data');
+               $("#title-operator").html("Nominal / Produk "+operator);
+               $.each(response.data, function(index, value) {
+                 $("#content-operator").append("<option value='"+value.pulsa_code+"'>"+value.pulsa_nominal+" / "+value.pulsa_price+" / "+value.pulsa_type+"</option>");
+               });
+               $("#pulsa-selection").show();
+               $(".panel-pulsa").show();
+               }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+               console.log(textStatus, errorThrown);
+            }
+          });
+        } else if (operator !== "" && type == 'data') {
+          let xhr = new XMLHttpRequest();
+
+          xhr.open('POST', "https://testprepaid.mobilepulsa.net/v1/legacy/index/"+type+"/"+operator.toLowerCase());
+
+          xhr.responseType = 'json';
+
+          xhr.send();
+
+          // the response is {"message": "Hello, world!"}
+          xhr.onload = function() {
+            let responseObj = xhr.response;
+            console.log(responseObj);
+            // alert(responseObj.message); // Hello, world!
+          };
+        } else {
+
+        }
+      }
+
+
+
+      var total_item = {{ count_item }} ;
+      $(".sohomeslider-inner-{{ module}}").owlCarousel2({
+          animateOut: '{{ animateOut}}',
+          animateIn: '{{ animateIn}}',
+          autoplay: {{ autoplay}},
+          autoplayTimeout: {{ autoplayTimeout}},
+          autoplaySpeed:  {{ autoplaySpeed}},
+          smartSpeed: 500,
+          autoplayHoverPause: {{ autoplayHoverPause}},
+          startPosition: {{ startPosition}},
+          mouseDrag:  {{ mouseDrag}},
+          touchDrag: {{ touchDrag}},
+          dots: {{ dots}},
+          autoWidth: false,
+          dotClass: "owl2-dot",
+          dotsClass: "owl2-dots",
+          loop: {{ loop}},
+          navText: ["Prev", "Next"],
+          navClass: ["owl2-prev", "owl2-next"],
+          responsive: {
+          0:{ items: {{ nb_column4}},
+            nav: total_item <= {{ nb_column4 }} ? false : (({{ nav  }} ) ? true: false),
+          },
+          480:{ items: {{ nb_column3 }},
+            nav: total_item <= {{ nb_column3 }} ? false : (({{ nav  }} ) ? true: false),
+          },
+          768:{ items: {{ nb_column2 }},
+            nav: total_item <= {{ nb_column2 }} ? false : (({{ nav  }} ) ? true: false),
+          },
+          992:{ items: {{ nb_column1 }},
+            nav: total_item <= {{ nb_column1 }} ? false : (({{ nav  }} ) ? true: false),
+          },
+          1200:{ items: {{ nb_column0 }},
+            nav: total_item <= {{ nb_column0 }} ? false : (({{ nav  }} ) ? true: false),
+          }
+        },
+      });
+    </script>
+    </div>
+    {% else %}
+        {{ objlang.get('text_noitem') }}
+    {% endif %}
+</div> <!--/.modcontent-->
+
+{% if post_text %}
+  <div class="form-group">
+    {{ post_text }}
+  </div>
+{% endif %}
+
+
+</div>

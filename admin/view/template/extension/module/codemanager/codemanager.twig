@@ -1,0 +1,241 @@
+{{ header }}
+{{ column_left }}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+          <h1>{{ heading_title }}</h1>
+          <ul class="breadcrumb">
+            {% for breadcrumb in breadcrumbs %}
+            <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+            {% endfor %}
+          </ul>
+		  <div style="float:right;margin-top:10px;">
+         	<button type="submit" id="supportTab" class="btn btn-success btn-xs">Get Support&nbsp;</button>
+         </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if error_warning %}
+            <div class="alert alert-danger autoSlideUp"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+             <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+            <script>$('.autoSlideUp').delay(3000).fadeOut(600, function(){ $(this).show().css({'visibility':'hidden'}); }).slideUp(600);</script>
+        {% endif %}
+        {% if success %}
+            <div class="alert alert-success autoSlideUp"><i class="fa fa-check-circle"></i> {{ success }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+            <script>$('.autoSlideUp').delay(3000).fadeOut(600, function(){ $(this).show().css({'visibility':'hidden'}); }).slideUp(600);</script>
+        {% endif %}
+
+    <a class="BigScreen" id="bigscreen" onClick="bigscreen();"><i class="fa fa-arrows-alt"></i></a>
+    <a class="BackToNormalScreen" id="backtonormalscreen" onClick="normalscreen();"><i class="fa fa-expand"></i></a>
+    <a class="NormalScreen" id="normalscreen" onClick="normalscreen();"><i class="fa fa-expand"></i></a>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="fa fa-list"></i>&nbsp;<span style="vertical-align:middle;font-weight:bold;">Code Editor</span></h3>
+            <div class="storeSwitcherWidget">
+                <div class="form-group">
+                    {% if buttons %}
+                    <button type="submit" id="showModal" class="btn btn-info btn-sm save-changes" data-toggle="modal" data-target="#myModal"><i class="fa fa-key"></i>&nbsp;&nbsp; {{ save_changes }}</button>
+                    <button type="submit" id="showUsers" class="btn btn-default btn-sm"><i class="fa fa-eye"></i>&nbsp;&nbsp;View all users with access</button>
+					<button type="submit" id="latestFiles" class="btn btn-default btn-sm"><i class="fa fa-file-text-o"></i>&nbsp;&nbsp;View last modified files</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="panel-body" style="padding: 0px;">
+            <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form"> 
+                <input type="hidden" name="store_id" value="{{ store.store_id }}" />
+                {{ tab_editor }}
+            </form>
+        </div> 
+    </div>
+ </div>
+</div>
+<div class="modal fade" id="modalFiles" tabindex="-1" role="dialog" aria-labelledby="LastestFiles" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+	<div class="modal-content">
+	  <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3 class="modal-title" id="myModalLabel">Last modified files by date</h3>
+	  </div>
+	  <div class="modal-body" style="padding-bottom:0px; margin-bottom:0px;">
+			<div id="dataFiles"></div>
+	  </div>
+	  <div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	  </div>
+	</div>
+  </div>
+</div>
+<script>
+$('#latestFiles').on('click', function(e){
+	$("#dataFiles").load('index.php?route={{ module_path }}/lastModifiedFiles&user_token={{ user_token }}');
+	$('#modalFiles').modal('show');
+});
+</script>
+<div class="modal fade" id="modalSupport" tabindex="-1" role="dialog" aria-labelledby="modalSupport" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+	<div class="modal-content">
+	  <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3 class="modal-title" id="myModalLabel">Support</h3>
+	  </div>
+	  <div class="modal-body" style="padding-bottom:0px; margin-bottom:0px;">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="thumbnail">
+						<img alt="Community support" style="width: 250px;" src="view/image/codemanager/community.png">
+						<div class="caption" style="text-align:center;padding-top:0px;">
+							<h3>Community</h3>
+							<p>Ask the community about your issue on the iSenseLabs forum. </p><br />
+							<p style="padding-top: 5px;"><a href="http://isenselabs.com/forum" target="_blank" class="btn btn-lg btn-default">Browse forums</a></p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="thumbnail">
+						<img data-src="holder.js/250x150" alt="Ticket support" style="width: 250px;" src="view/image/codemanager/tickets.png">
+						<div class="caption" style="text-align:center;padding-top:0px;">
+							<h3>Tickets</h3>
+							<p>Want to comminicate one-to-one with our tech people? Then open a support ticket.</p>
+							<p style="padding-top: 5px;"><a href="http://isenselabs.com/tickets/open/" target="_blank" class="btn btn-lg btn-default">Open a support ticket</a></p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="thumbnail">
+						<img alt="Pre-sale support" style="width: 250px;" src="view/image/codemanager/pre-sale.png">
+						<div class="caption" style="text-align:center;padding-top:0px;">
+							<h3>Pre-sale</h3>
+							<p>Have a brilliant idea for your webstore? Our team of top-notch developers can make it real.</p>
+							<p style="padding-top: 5px;"><a href="mailto:sales@isenselabs.com?subject=Pre-sale question" target="_blank" class="btn btn-lg btn-default">Bump the sales</a></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	  </div>
+	  <div class="modal-footer" style="margin-top:0px;">
+		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	  </div>
+	</div>
+  </div>
+</div>
+<script>
+$('#supportTab').on('click', function(e){
+	$('#modalSupport').modal('show');
+});
+</script>				
+<div class="modal fade" id="modalMore" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3 class="modal-title" id="myModalLabel"><img src="view/image/imodules.png" style="margin-top: -5px; padding-right: 5px;" />Introducing <strong>CodeManager Pro</strong>!</h3>
+      </div>
+      <div class="modal-body">
+            <div id="dataMore">For even more awesome features, upgrade to <strong>CodeManager Pro</strong>. Here are some of the benefits:</div>
+                <br />
+                <ul style="list-style-type: none;margin-left: -20px;">
+                    <li><i class="fa fa-star"></i>&nbsp;&nbsp;View last modified files</li>
+                    <li><i class="fa fa-star"></i></span>&nbsp;&nbsp;Git support</li>
+                    <li><i class="fa fa-star"></i></span>&nbsp;&nbsp;Color picker</li>
+                    <li><i class="fa fa-star"></i></span>&nbsp;&nbsp;Compare files</li>
+                    <li><i class="fa fa-star"></i></span>&nbsp;&nbsp;Terminal emulator</li>
+                    <li><i class="fa fa-star"></i></span>&nbsp;&nbsp;TODO List</li>
+                    <li><i class="fa fa-star"></i></span>&nbsp;&nbsp;Premium support</li>
+                </ul>
+            </div>
+      <div class="modal-footer" style="margin-top:0px;">
+        <a href="https://isenselabs.com/products/view/codemanager-pro-full-featured-ide-framework-for-opencart" style="color: #ffffff !important;" target="_blank" type="button" class="btn btn-primary">Get it now</a>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function exitOfFullScreen(el) {
+    var requestMethod = el.cancelFullScreen||el.webkitCancelFullScreen||el.mozCancelFullScreen||el.exitFullscreen;
+    if (requestMethod) { // cancel full screen.
+        requestMethod.call(el);
+    } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
+        var wscript = new ActiveXObject("WScript.Shell");
+        if (wscript !== null) {
+            wscript.SendKeys("{F11}");
+        }
+    }
+}
+function requestFullScreen(el) {
+    // Supports most browsers and their versions.
+    var requestMethod = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullScreen;
+    if (requestMethod) { // Native full screen.
+        requestMethod.call(el);
+    } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
+        var wscript = new ActiveXObject("WScript.Shell");
+        if (wscript !== null) {
+            wscript.SendKeys("{F11}");
+        }
+    }
+    return false
+}
+function toggleFull() {
+    var elem = document.body; // Make the body go full screen.
+    var isInFullScreen = (document.fullScreenElement && document.fullScreenElement !== null) ||  (document.mozFullScreen || document.webkitIsFullScreen);
+
+    if (isInFullScreen) {
+        $('#iFrame').addClass("FullScreen");
+        requestFullScreen(document.body);
+    } else {
+        //$('#backtonormalscreen').hide();
+        //$('#bigscreen').hide();
+        exitOfFullScreen(document);
+    }
+    return false;
+}
+function fullscreen() {
+    $('#iFrame').addClass("FullScreen");
+    $('#bigscreen').show();
+    $('#backtonormalscreen').show();
+}
+function normalscreen() {
+    if ($('#iFrame').hasClass("BigFullScreen")) {
+        exitOfFullScreen(document);
+        $('#bigscreen').show();
+        $('#backtonormalscreen').show();
+        $('#iFrame').addClass("FullScreen");
+        $('#iFrame').removeClass("BigFullScreen");
+    } else {
+        $('#normalscreen').hide();
+        $('#backtonormalscreen').hide();
+        $('#bigscreen').hide();
+        $('#iFrame').removeClass("FullScreen");
+    }
+}
+function bigscreen() {
+    if ($('#iFrame').hasClass("BigFullScreen")) {
+        exitOfFullScreen(document);
+        $('#iFrame').removeClass("BigFullScreen");
+        $('#iFrame').removeClass("FullScreen");
+        $('#backtonormalscreen').hide();
+        $('#bigscreen').hide();
+    } else {
+        requestFullScreen(document.body);
+        $('#bigscreen').show();
+        $('#backtonormalscreen').show();
+        $('#iFrame').addClass("BigFullScreen");
+        
+    }
+
+}
+document.addEventListener("fullscreenchange", toggleFull, false);
+document.addEventListener("webkitfullscreenchange", toggleFull, false);
+document.addEventListener("mozfullscreenchange", toggleFull, false);
+
+$('#wantMore').on('click', function(e){
+    $('#modalMore').modal('show');
+});
+</script>
+{{ footer }}

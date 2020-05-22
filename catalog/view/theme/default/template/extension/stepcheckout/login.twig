@@ -1,0 +1,15 @@
+<h2>{{ text_returning_customer }}</h2>
+<form id="steplogin">
+	<div class="form-group required">
+		<label for="exampleInputEmail1" class="control-label">{{ entry_email }}</label>
+		<input type="text" name="email" value="" placeholder="{{ entry_email }}" id="input-email" class="form-control" />
+	</div>
+	<div class="form-group required">
+		<label for="input-password" class="control-label">{{ entry_password }}</label>
+		<input type="password" name="password" value="" placeholder="{{ entry_password }}" id="input-password" class="form-control" />
+	</div>
+	<div class="form-group">
+		<a href="{{ forgotten }}">{{ text_forgotten }}</a>
+	</div>
+	<input type="button" value="{{ button_save_continue }}" id="button-login" data-loading-text="{{ text_loading }}" class="save_continue btn btn-primary btn-block" />
+</form>

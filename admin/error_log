@@ -1,0 +1,16 @@
+[30-May-2019 14:30:10 UTC] PHP Fatal error:  Uncaught exception 'Exception' with message 'Error: Unknown column 'extension_id' in 'field list'<br />Error No: 1054<br />INSERT INTO `oc_extension_install` SET `filename` = 'ppob_multipayment.ocmod.xml', `extension_id` = '0', `extension_download_id` = '0', `date_added` = NOW()' in /home/u3090244/public_html/btk/system/library/db/mysqli.php:40
+Stack trace:
+#0 /home/u3090244/public_html/btk/catalog/controller/extension/lightning/beta.php(16): DB\MySQLi->query('INSERT INTO `oc...')
+#1 /home/u3090244/public_html/btk/catalog/controller/extension/lightning/beta.php(34): light_db->Whs('INSERT INTO `oc...')
+#2 /home/u3090244/public_html/storage/modification/system/library/db.php(47): light_db->query('INSERT INTO `oc...')
+#3 /home/u3090244/public_html/btk/admin/model/extension/enhancement/ea_ocmod_manager.php(45): DB->query('INSERT INTO `oc...')
+#4 [internal function]: ModelExtensionEnhancementEaOcmodManager->addExtensionInstall('ppob_multipayme...')
+#5 /home/u3090244/public_html/storage/modification/system/engine/l in /home/u3090244/public_html/btk/system/library/db/mysqli.php on line 40
+[30-May-2019 14:33:36 UTC] PHP Fatal error:  Uncaught exception 'Exception' with message 'Error: Unknown column 'extension_id' in 'field list'<br />Error No: 1054<br />INSERT INTO `oc_extension_install` SET `filename` = 'ppob_multipayment.ocmod.xml', `extension_id` = '0', `extension_download_id` = '0', `date_added` = NOW()' in /home/u3090244/public_html/btk/system/library/db/mysqli.php:40
+Stack trace:
+#0 /home/u3090244/public_html/btk/catalog/controller/extension/lightning/beta.php(16): DB\MySQLi->query('INSERT INTO `oc...')
+#1 /home/u3090244/public_html/btk/catalog/controller/extension/lightning/beta.php(34): light_db->Whs('INSERT INTO `oc...')
+#2 /home/u3090244/public_html/storage/modification/system/library/db.php(47): light_db->query('INSERT INTO `oc...')
+#3 /home/u3090244/public_html/btk/admin/model/extension/enhancement/ea_ocmod_manager.php(45): DB->query('INSERT INTO `oc...')
+#4 [internal function]: ModelExtensionEnhancementEaOcmodManager->addExtensionInstall('ppob_multipayme...')
+#5 /home/u3090244/public_html/storage/modification/system/engine/l in /home/u3090244/public_html/btk/system/library/db/mysqli.php on line 40

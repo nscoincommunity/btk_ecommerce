@@ -1,0 +1,15 @@
+<ul id="listCategoryEdit" class="ztree"></ul>
+
+<script>
+  var settingEdit = {check: {enable: true,chkboxType: { "Y" : "", "N" : "" }},view: {dblClickExpand: false},data: {simpleData: {enable: true}}};
+
+  var zCategoriesEditNodes =[
+    {% for category in categories %}
+        {id:{{ category.category_id }}, pId:{{ category.parent_id }}, name:"{{ category.name }}", checked: {% if category.category_id in item.categories %} true {% else %} false {% endif %}},
+    {% endfor %}
+  ];
+
+
+  var categoryEditTree = $.fn.zTree.init($("#listCategoryEdit"), settingEdit, zCategoriesEditNodes);
+
+</script>

@@ -1,0 +1,39 @@
+
+        <li class="discount">
+            <div class="row">
+                <div class="col-xs-3">
+                    <i class="fa fa-arrows sortable pull-left" aria-hidden="true"></i>
+                    <select name="customer_group_id.{{ discount.product_discount_id + 0 }}" class="form-control input-sm">
+                        {% for group in groups %}
+                            <option value="{{ group.customer_group_id }}" {% if(discount.customer_group_id == group.customer_group_id) %} selected {% endif %}>{{ group.name }}</option>
+                        {% endfor %}
+                    </select>
+
+                </div>
+                <div class="col-xs-2">
+                    <input type="text" class="form-control input-sm" name="quantity.{{ discount.product_discount_id + 0 }}" value="{{ discount.quantity }}" />
+                </div>
+                <div class="col-xs-2">
+                    <input type="text" class="form-control input-sm" name="price.{{ discount.product_discount_id + 0 }}" value="{{ discount.price }}" />
+                </div>
+
+                <div class="col-xs-2">
+                    <div class="input-group date date_start">
+                        <input type="text" name="date_start.{{ discount.product_discount_id + 0 }}" data-date-format="YYYY-MM-DD" class="form-control input-sm" value="{{ discount.date_start }}" />
+                        <span class="input-group-btn">
+                            <button class="btn btn-default btn-sm" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-3">
+                    <button type="button" class="btn btn-sm btn-danger discount-remove pull-right"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+
+                    <div class="input-group date date_end">
+                        <input type="text" name="date_end.{{ discount.product_discount_id + 0 }}" data-date-format="YYYY-MM-DD" class="form-control input-sm" value="{{ discount.date_end }}" />
+                        <span class="input-group-btn">
+                            <button class="btn btn-default btn-sm" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </li>

@@ -1,0 +1,207 @@
+<div class="row">
+    <div class="col-xs-3">
+        <ul class="nav nav-tabs tabs-left options-list">
+            {% set first_item = false %}
+
+            {% for option in options %}
+                {% for product_option_id,o in item.options %}
+                    {% if o['option_id'] == option.option_id %}
+                        <li class="text-right {% if first_item == false %} active {% endif %}"><a href="#option{{ product_option_id }}" data-toggle="tab">{{ option.name }}</a></li>
+                        {% set first_item = true %}
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </ul>
+        <strong class="pull-right mb-5">{{ modal.fields.option_add }}</strong>
+        <select class="form-control select2 select2-option" id="option-add">
+            <option value="">{{ modal.notes.option_add }}</option>
+            {% for label,fields in optionAdd %}
+                <optgroup label="{{ label }}">
+                    {% for o in fields %}
+                        <option value="{{ o['option_id'] }}" data-type="{{ o['type'] }}">{{ o['name'] }}</option>
+                    {% endfor %}
+                </optgroup>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-xs-9">
+        <div class="block-data tab-content options-list-content">
+            {% set first_item = false %}
+
+            {% for option in options %}
+                {% for product_option_id,o in item.options %}
+                    {% if o['option_id'] == option.option_id %}
+                        <div class="tab-pane {% if first_item == false %} active {% endif %}" id="option{{ product_option_id }}" data-id="{{ product_option_id }}">
+                            <form>
+                                <input type='hidden' name='option_type.{{ product_option_id }}' value='{{  o['option_id'] }}' />
+                                <input type='hidden' name='option_type_text.{{ product_option_id }}' value='{{  o['type'] }}' />
+
+                                <div class="form-group required">
+                                    <label for="option-required-{{ product_option_id }}">{{ modal.fields.required }}</label>
+                                    <select class="form-control input-sm" name="required.{{ product_option_id }}" id="option-required-{{ product_option_id }}">
+                                        <option value="0" {% if(o['required'] == 0) %} selected {% endif %}>{{ modal.text.no }}</option>
+                                        <option value="1" {% if(o['required'] == 1) %} selected {% endif %}>{{ modal.text.yes }}</option>
+                                    </select>
+                                </div>
+
+                                {% if option.type in ['text', 'date', 'time', 'datetime', 'textarea'] %}
+                                    <div class="form-group">
+                                        <label for="option-value-{{ product_option_id }}">{{ modal.fields.option_value }}</label>
+                                        {% if option.type == 'text' %}
+                                            <input type="text" class="form-control input-sm" name="value.{{ product_option_id }}" id="option-value-{{ product_option_id }}" placeholder="{{ modal.fields.option_value }}" value="{{ o['value'] }}" />
+                                        {% endif %}
+                                        {% if option.type == 'textarea' %}
+                                            <textarea class="form-control input-sm" name="value.{{ product_option_id }}" id="option-value-{{ product_option_id }}" placeholder="{{ modal.fields.option_value }}">{{ o['value'] }}</textarea>
+                                        {% endif %}
+                                        {% if option.type == 'date' %}
+                                            <div class="input-group date">
+                                                <input data-date-format="YYYY-MM-DD" type="text" class="form-control input-sm" name="value.{{ product_option_id }}" id="option-value-{{ product_option_id }}" placeholder="{{ modal.fields.option_value }}" value="{{ o['value'] }}" />
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-default btn-sm" type="button"><i class="fa fa-calendar"></i></button>
+                                                </span>
+                                            </div>
+                                        {% endif %}
+                                        {% if option.type == 'time' %}
+                                            <div class="input-group time">
+                                                <input type="text" class="form-control input-sm" name="value.{{ product_option_id }}" id="option-value-{{ product_option_id }}" placeholder="{{ modal.fields.option_value }}" value="{{ o['value'] }}" />
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-default btn-sm" type="button"><i class="fa fa-clock-o"></i></button>
+                                                </span>
+                                            </div>
+                                        {% endif %}
+                                        {% if option.type == 'datetime' %}
+                                            <div class="input-group datetime">
+                                                <input type="text" class="form-control input-sm" name="value.{{ product_option_id }}" id="option-value-{{ product_option_id }}" placeholder="{{ modal.fields.option_value }}" value="{{ o['value'] }}" />
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-default btn-sm" type="button"><i class="fa fa-calendar"></i></button>
+                                                </span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% elseif option.type == 'file' %}
+                                {% else %}
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">{{ modal.fields.option_value }}</th>
+                                                <th class="text-center required-after required-together" style="width: 90px">{{ modal.fields.option_quantity }}</th>
+                                                <th class="text-center" style="width: 90px">{{ modal.fields.option_subtract }}</th>
+                                                <th class="text-center" style="width: 80px">{{ modal.fields.option_price }}</th>
+                                                <th class="text-center" style="width: 80px">{{ modal.fields.option_points }}</th>
+                                                <th class="text-center" style="width: 80px">{{ modal.fields.option_weight }}</th>
+                                                <th style="width: 30px"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for child in o['children'] %}
+                                                {% include 'extension/module/catalog_pro/edit_product/block_options_once.twig' with {child: child, modal: modal} %}
+                                            {% else %}
+                                                {% include 'extension/module/catalog_pro/edit_product/block_options_once.twig' with {child: null, modal: modal} %}
+                                            {% endfor %}
+
+                                        </tbody>
+
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="7">
+                                                    <button type="button" class="btn btn-success btn-xs option-value-add pull-right">
+                                                        {{ modal.notes.option_value_add }}
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+
+                                    </table>
+                                {% endif %}
+                            </form>
+                        </div>
+
+                        {% set first_item = true %}
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% for option in options %}
+    <div class="tab-pane etalon" style="display: none" data-type="{{ option.type }}">
+        <form>
+            <div class="form-group required">
+                <label for="option-required">{{ modal.fields.required }}</label>
+                <select class="form-control input-sm" name="required.">
+                    <option value="0" selected>{{ modal.text.no }}</option>
+                    <option value="1">{{ modal.text.yes }}</option>
+                </select>
+            </div>
+
+            {% if option.type in ['text', 'date', 'time', 'datetime', 'textarea'] %}
+                <div class="form-group">
+                    <label>{{ modal.fields.option_value }}</label>
+                    {% if option.type == 'text' %}
+                        <input type="text" class="form-control input-sm" name="value" placeholder="{{ modal.fields.option_value }}" value="" />
+                    {% endif %}
+                    {% if option.type == 'textarea' %}
+                        <textarea class="form-control input-sm" name="value" id="option-value" placeholder="{{ modal.fields.option_value }}"></textarea>
+                    {% endif %}
+                    {% if option.type == 'date' %}
+                        <div class="input-group" data-additional-type="date">
+                            <input data-date-format="YYYY-MM-DD" type="text" class="form-control input-sm" name="value" id="option-value" placeholder="{{ modal.fields.option_value }}" value="" />
+                            <span class="input-group-btn">
+                                <button class="btn btn-default btn-sm" type="button"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
+                    {% endif %}
+                    {% if option.type == 'time' %}
+                        <div class="input-group" data-additional-type="time">
+                            <input type="text" class="form-control input-sm" name="value" id="option-value" placeholder="{{ modal.fields.option_value }}" value="" />
+                            <span class="input-group-btn">
+                                <button class="btn btn-default btn-sm" type="button"><i class="fa fa-clock-o"></i></button>
+                            </span>
+                        </div>
+                    {% endif %}
+                    {% if option.type == 'datetime' %}
+                        <div class="input-group" data-additional-type="datetime">
+                            <input type="text" class="form-control input-sm" name="value" id="option-value" placeholder="{{ modal.fields.option_value }}" value="" />
+                            <span class="input-group-btn">
+                                <button class="btn btn-default btn-sm" type="button"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
+                    {% endif %}
+                </div>
+            {% elseif option.type == 'file' %}
+            {% else %}
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th class="text-center">{{ modal.fields.option_value }}</th>
+                        <th class="text-center required-after required-together" style="width: 90px">{{ modal.fields.option_quantity }}</th>
+                        <th class="text-center" style="width: 90px">{{ modal.fields.option_subtract }}</th>
+                        <th class="text-center" style="width: 80px">{{ modal.fields.option_price }}</th>
+                        <th class="text-center" style="width: 80px">{{ modal.fields.option_points }}</th>
+                        <th class="text-center" style="width: 80px">{{ modal.fields.option_weight }}</th>
+                        <th style="width: 30px"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for child in o['children'] %}
+                            {% include 'extension/module/catalog_pro/edit_product/block_options_once.twig' with {child: child, modal: modal} %}
+                        {% else %}
+                            {% include 'extension/module/catalog_pro/edit_product/block_options_once.twig' with {child: null, modal: modal} %}
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="7">
+                            <button type="button" class="btn btn-success btn-xs option-value-add pull-right">
+                                {{ modal.notes.option_value_add }}
+                            </button>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            {% endif %}
+        </form>
+    </div>
+
+{% endfor %}

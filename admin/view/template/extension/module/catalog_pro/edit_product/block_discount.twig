@@ -1,0 +1,63 @@
+<div class="block-data tab-content discount-list-content">
+    <div class="row">
+        <div class="col-xs-3">
+            <b>{{ modal.fields.discount_group }}</b>
+        </div>
+        <div class="col-xs-2">
+            <b>{{ modal.fields.discount_quantity }}</b>
+        </div>
+        <div class="col-xs-2">
+            <b>{{ modal.fields.discount_price }}</b>
+        </div>
+        <div class="col-xs-2">
+            <b>{{ modal.fields.discount_date_start }}</b>
+        </div>
+        <div class="col-xs-3">
+            <b>{{ modal.fields.discount_date_end }}</b>
+        </div>
+
+    </div>
+
+    <ul>
+
+        {% for discount in item.discount %}
+            {% include 'extension/module/catalog_pro/edit_product/block_discount_once.twig' with {discount: discount, modal: modal} %}
+        {% else %}
+            {% include 'extension/module/catalog_pro/edit_product/block_discount_once.twig' with {discount: null, modal: modal} %}
+        {% endfor %}
+
+    </ul>
+
+    <div style="height: 20px;">
+        <button type="button" class="btn btn-success btn-xs discount-add pull-right">
+            {{ modal.fields.discount_add }}
+        </button>
+    </div>
+</div>
+
+
+<style>
+    .discount-list-content li {
+        list-style-type: none;
+        margin-bottom: 5px;
+    }
+
+    .discount-list-content li .sortable {
+        position: absolute;
+        left: 15px;
+        top: 6px;
+    }
+
+    .discount-list-content li.discount select {
+        width: calc(100% - 25px);
+        float: right;
+    }
+
+    .discount-list-content ul {
+        padding-left: 0;
+    }
+
+    .discount-list-content li div.col-xs-3:last-child div {
+        width: calc(100% - 40px);
+    }
+</style>

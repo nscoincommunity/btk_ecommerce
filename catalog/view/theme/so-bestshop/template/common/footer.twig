@@ -1,0 +1,210 @@
+{# =========== Show Header==============#}
+
+{% if soconfig.get_settings('typefooter') =='1'%}
+	{% include theme_directory~'/template/footer/footer1.twig' with {typefooter: soconfig.get_settings('typefooter')} %}
+{% elseif soconfig.get_settings('typefooter') =='2'%}
+	{% include theme_directory~'/template/footer/footer2.twig' with {typefooter: soconfig.get_settings('typefooter')} %}
+{% elseif soconfig.get_settings('typefooter') =='3'%}
+	{% include theme_directory~'/template/footer/footer3.twig' with {typefooter: soconfig.get_settings('typefooter')} %}
+
+{% endif %}
+
+
+
+{# =========== Show BackToTop==============#}
+
+{% if soconfig.get_settings('social_sidebar')  %}
+	{% if soconfig.get_settings('social_sidebar') == 1 %}
+		{% set  social_sidebar = 'socialwidgets-left'%}
+	{% else %}
+		{% set  social_sidebar = 'socialwidgets-right'%}
+	{% endif %}
+	<section class="social-widgets visible-lg {{social_sidebar}} ">
+		<ul class="items">
+			{% if soconfig.get_settings('social_fb_status') %}
+			<li class="item item-01 facebook">
+				<a href="catalog/view/theme/{{ theme_directory }}/template/social/facebook.php?account_fb={{soconfig.get_settings('facebook')}} " class="tab-icon"><span class="fa fa-facebook"></span></a>
+				<div class="tab-content">
+					<div class="title"><h5>FACEBOOK</h5></div>
+					<div class="loading">
+						<img src="catalog/view/theme/{{ theme_directory }}/images/ajax-loader.gif" class="ajaxloader" alt="loader">
+					</div>
+				</div>
+			</li>
+			{% endif %}
+
+			{% if soconfig.get_settings('social_twitter_status') %}
+			<li class="item item-02 twitter">
+				<a href="catalog/view/theme/{{ theme_directory }}/template/social/twitter.php?account_twitter={{ soconfig.get_settings('twitter')}} " class="tab-icon"><span class="fa fa-twitter"></span></a>
+				<div class="tab-content">
+					<div class="title"><h5>TWITTER FEEDS</h5></div>
+					<div class="loading">
+						<img src="catalog/view/theme/{{ theme_directory }}/images/ajax-loader.gif" class="ajaxloader" alt="loader">
+					</div>
+				</div>
+			</li>
+			{% endif %}
+
+			{% if soconfig.get_settings('social_custom_status') %}
+			<li class="item item-03 youtube">
+				<div class="tab-icon"><span class="fa fa-youtube"></span></div>
+				<div class="tab-content">
+					<div class="loading">
+						{% if soconfig.get_settings('video_code') %}
+								{{ soconfig.decode_entities( soconfig.get_settings('video_code') ) }}
+						{% endif %}
+					</div>
+				</div>
+			</li>
+			{% endif %}
+		</ul>
+	</section>
+
+{% endif %}
+
+</div>
+<!-- PULSA PPOB -->
+<div id="pulsamodalppob" class="modal fade" role="dialog" style="z-index: 999;" data-backdrop="false">
+	<div class="modal-dialog">
+
+		<div class="modal-content">
+			<div class="modal-header" style="background-color: red;">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title" style="color: white">BTK Mart Pulsa</h4>
+			</div>
+			<div class="modal-body">
+
+				<center>
+					<div class="loader" style="display:none"></div>
+					<p id="result-pulsa" style="display:none"></p>
+				</center>
+
+				<div id="panel-pulsa" class="panel-pulsa">
+					<div class="form-group">
+						<label class="control-label" for="input-email">Nomor Tujuan</label>
+						<input onkeypress="checkNumber(this.value,'pulsa')" id="nomor-handphone-topup" type="text" name="handphone" placeholder="Masukan nomor handphone" class="form-control nomor-handphone-pulsa" />
+					</div>
+
+					<div class="form-group" style="display: none;" id="pulsa-selection">
+						<label id="title-operator"></label>
+						<select class="form-control input-lg" id="content-operator">
+						</select>
+					</div>
+				</div>
+
+			</div>
+			<div class="modal-footer panel-pulsa" style="display: none;">
+				<button type="button" class="btn btn-success" onclick="TopUp()">Kirim</button>
+			</div>
+		</div>
+
+	</div>
+</div>
+<!-- PULSA PPOB -->
+
+<!-- PAKET DATA PPOB -->
+<div id="paketdatamodalppob" class="modal fade" role="dialog" style="z-index: 999;" data-backdrop="false">
+	<div class="modal-dialog">
+
+		<div class="modal-content">
+			<div class="modal-header" style="background-color: red;">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title" style="color: white">BTK Mart Paket Data</h4>
+			</div>
+			<div class="modal-body">
+
+				<center>
+					<div class="loader" style="display:none"></div>
+					<p id="result-paketdata" style="display:none"></p>
+				</center>
+
+				<div id="panel-paketdata" class="panel-pulsa">
+					<div class="form-group">
+						<label class="control-label" for="input-email">Nomor Tujuan</label>
+						<input onkeypress="checkNumber(this.value, 'data')" id="nomor-handphone-paketdata" type="number" name="handphone" placeholder="Masukan nomor handphone" class="form-control nomor-handphone-paketdata" />
+					</div>
+
+					<div class="form-group" style="display: none;" id="paketdata-selection">
+						<label id="title-operator-paketdata"></label>
+						<select class="form-control input-lg" id="content-operator-paketdata">
+						</select>
+					</div>
+				</div>
+
+			</div>
+			<div class="modal-footer panel-pulsa" style="display: none;">
+				<button type="button" class="btn btn-success" onclick="PaketData()">Kirim</button>
+			</div>
+		</div>
+
+	</div>
+</div>
+<!-- PAKET DATA PPOB -->
+
+<!-- TELFON SPEEDY PPOB -->
+<div id="telfonmodalppob" class="modal fade" role="dialog" style="z-index: 999;" data-backdrop="false">
+	<div class="modal-dialog">
+
+		<div class="modal-content">
+			<div class="modal-header" style="background-color: red;">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title" style="color: white">BTK Mart Telkom Speedy</h4>
+			</div>
+			<div class="modal-body">
+
+				<center>
+					<div class="loader" style="display:none"></div>
+					<p id="result-telfonspeedy" style="display:none"></p>
+				</center>
+
+				<div id="panel-telfonspeedy" class="panel-telfonspeedy">
+					<div class="form-group">
+						<label class="control-label" for="input-email">Nomor Pelanggan</label>
+						<input onkeypress="checkNumber(this.value, 'data')" id="nomor-telfonspeedy" type="number" name="telfonspeedy" placeholder="Masukan nomor pelanggan" class="form-control nomor-telfonspeedy" />
+					</div>
+				</div>
+
+			</div>
+			<div class="modal-footer panel-telfonspeedy">
+				<button type="button" class="btn btn-success" onclick="TelfonSpeedy()">CEK TAGIHAN</button>
+			</div>
+		</div>
+
+	</div>
+</div>
+<!-- TELFON SPEEDY PPOB -->
+
+<!-- PDAM PPOB -->
+<div id="pdammodalppob" class="modal fade" role="dialog" style="z-index: 999;" data-backdrop="false">
+	<div class="modal-dialog">
+
+		<div class="modal-content">
+			<div class="modal-header" style="background-color: red;">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title" style="color: white">BTK Mart PDAM</h4>
+			</div>
+			<div class="modal-body">
+
+				<center>
+					<div class="loader" style="display:none"></div>
+					<p id="result-pdam" style="display:none"></p>
+				</center>
+
+				<div id="panel-pdam" class="panel-pdam">
+					<div class="form-group">
+						<label class="control-label" for="input-email">Nomor Pelanggan</label>
+						<input onkeypress="checkNumber(this.value, 'data')" id="nomor-pdam" type="number" name="pdam" placeholder="Masukan nomor pelanggan" class="form-control nomor-pdam" />
+					</div>
+				</div>
+
+			</div>
+			<div class="modal-footer panel-pdam">
+				<button type="button" class="btn btn-success" onclick="Pdam()">CEK TAGIHAN</button>
+			</div>
+		</div>
+
+	</div>
+</div>
+<!-- PDAM PPOB -->
+</body>
+</html>

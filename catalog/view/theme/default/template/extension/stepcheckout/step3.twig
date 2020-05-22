@@ -1,0 +1,139 @@
+<div class="row steps_head">
+	<div {% if not prestep %} onclick="loadfirststep();" {% endif %} class="col-xs-4 step_bars icon_done">
+		<div class="step_circle">
+			<i class="fa fa-user"></i>
+			<p class="hidden-xs">{{ text_account }}</p>
+		</div>
+	</div>
+	<div {% if prestep %} onclick="loadsecondstep();" {% else %} onclick="loadguestsecondstep();" {% endif %} class="col-xs-4 step_bars icon_done">
+		<div class="step_circle ">
+			<i class="fa fa-send"></i>
+			<p class="hidden-xs">{{ text_address }}</p>
+		</div>
+	</div>
+	<div class="col-xs-4">
+		<div class="step_circle icon_active">
+			<i class="fa fa-credit-card"></i>
+			<p class="hidden-xs">{{ text_payment }}</p>
+		</div>
+	</div>
+</div>
+<div id="finalsteps" class="row steps_body">
+	<div class="loader"><div class="spin"></div></div>
+	<div class="col-sm-12">
+		<div class="step3">
+			<div class="column1">
+				<ul class="nav nav-pills nav-stacked choosepayment">
+				  <li class="tabheading">
+						{{ text_payment_method }}
+				  </li>
+				  {% for k,payment_method in allpayment_methods %}
+				  <li  {% if payment_method['code'] == code or not code %}class="active"{% endif %}>
+					<a href="#tab_{{ payment_method['code'] }}" data-toggle="pill">
+						{{ payment_method['title'] }}
+							{% if payment_method['code'] == code or not code %}
+						<input class="hide" type="radio" name="payment_method" checked="checked" value="{{ payment_method['code'] }}" />
+						{% else %}
+						<input class="hide" checked="checked"type="radio" name="payment_method" value="{{ payment_method['code'] }}" />
+						{% endif %}
+					</a>
+				  </li>
+				  {% endfor %}
+				</ul>
+			</div>
+			<div class="column2">
+				<div class="tab-content">
+					{% for k,payment_method in allpayment_methods %}
+						<div class="tab-pane {% if payment_method['code'] == code or not code %}active{% endif %}" id="tab_{{ payment_method['code'] }}">
+						<div class="table-responsive">
+						  <table class="table table-bordered table-hover">
+							<thead>
+							  <tr>
+								<td class="text-center">{{ column_image }}</td>
+								<td class="text-left">{{ column_name }}</td>
+								<td class="text-left">{{ column_model }}</td>
+								<td class="text-right">{{ column_quantity }}</td>
+								<td class="text-right">{{ column_price }}</td>
+								<td class="text-right">{{ column_total }}</td>
+							  </tr>
+							</thead>
+							<tbody>
+							{% for product in products %}
+							  <tr>
+							    <td class="text-center">
+								{% if product.thumb %}
+									<a class="pull-left" href="{{ product['href'] }}"><img src="{{ product['thumb'] }}" alt="{{ product['name'] }}" title="{{ product['name'] }}" class="img-thumbnail" /></a>
+								{% endif %}
+								</td>
+								<td class="text-left"><a href="{{ product['href'] }}">{{ product['name'] }}</a>
+								  {% for option in product.option %} 
+								  <br />
+								  &nbsp;<small> - {{ option['name'] }}: {{ option['value'] }}</small>
+								  {% endfor %}
+								 {% if product.recurring %}
+								  <br />
+								  <span class="label label-info">{{ text_recurring_item }}</span> <small>{{ product['recurring'] }}</small>
+								  {% endif %}</td>
+								<td class="text-left">{{ product['model'] }}</td>
+								<td class="text-right">{{ product['quantity'] }}</td>
+								<td class="text-right">{{ product['price'] }}</td>
+								<td class="text-right">{{ product['total'] }}</td>
+							  </tr>
+							  {% endfor %}
+							  {% for voucher in vouchers %}
+							  <tr>
+								<td class="text-left">{{ voucher['description'] }}</td>
+								<td class="text-left"></td>
+								<td class="text-right">1</td>
+								<td class="text-right">{{ voucher['amount'] }}</td>
+								<td class="text-right">{{ voucher['amount'] }}</td>
+							  </tr>
+							  {% endfor %}
+							</tbody>
+							<tfoot>
+							   {% for total in totals %}
+							  <tr>
+								<td colspan="5" class="text-right"><strong>{{ total['title'] }}:</strong></td>
+								<td class="text-right">{{ total['text'] }}</td>
+							  </tr>
+							{% endfor %}
+							</tfoot>
+						  </table>
+						</div>
+						<div class="clearpayment loadgateway{{ payment_method['code'] }}"></div>
+						</div>
+					{% endfor %}
+				</div>
+				<!--<button class="save_continue confirmbtn btn btn-primary btn-block">Confirm Order</button>-->
+			</div>
+		 </div>
+	</div>
+</div>
+<script type="text/javascript"><!--
+$('#finalsteps .choosepayment li').on('click',function(){
+	var id = $(this).children('a').attr('href');
+	$(id+' #button-confirm, input[type="submit"]').addClass('save_continue confirmbtn btn-block');
+	$(id+' #button-confirm, input[type="submit"]').parent('div').removeClass('pull-right');
+	var code = $(this).find('input[name="payment_method"]').val();
+	loadgateway(code,id);
+	editorder(code);
+});
+$('#finalsteps .choosepayment li.active').trigger('click');
+
+function loadgateway(code,id){
+	$.ajax({
+		url: 'index.php?route=extension/step3/loadpayment&code='+code,
+		dataType: 'json',
+		success: function(json){
+			$('.clearpayment').html('');
+			$('.loadgateway'+code).html(json['payment']);
+			$(id+' #button-confirm, input[type="submit"]').addClass('save_continue confirmbtn btn-block');
+			$(id+' #button-confirm, input[type="submit"]').parent('div').removeClass('pull-right');
+		},
+		error: function(xhr, ajaxOptions, thrownError) {
+			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+	});
+	
+}
+//--></script>

@@ -1,0 +1,216 @@
+{{ header }}
+{% if direction == 'rtl' %}
+<link href="catalog/view/javascript/stepcheckout/rtl.css" rel="stylesheet" />
+{% endif %}
+<link href="catalog/view/javascript/stepcheckout/stepcheckout.css" rel="stylesheet" />
+<script src="catalog/view/javascript/stepcheckout/stepcheckout.js" type="text/javascript"></script>
+<div class="container">
+  <ul class="breadcrumb">
+   {% for breadcrumb in breadcrumbs %}
+    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+ {% if error_warning %}
+  <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+  </div>
+  {% endif %}
+ <div class="row">{{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }}">{{ content_top }}
+      <h1>{{ heading_title }}</h1>
+	  {{ stepcheckout_description }}
+	<div id="loadcontent"></div>
+	{{ content_bottom }}</div>
+    {{ column_right }}</div>
+</div>
+<script type="text/javascript"><!--
+{% if not logged and not step %}
+loadfirststep();
+{% elseif logged and step==2 %}
+loadsecondstep();
+{% elseif step==3 and order_id %}
+{% if logged %}
+loadsecondstep();
+ {% else %}
+loadguestsecondstep();
+{% endif %}
+ {% else %}
+{% if logged %}
+loadsecondstep();
+ {% else %}
+loadfirststep();
+{% endif %}
+{% endif %}
+// Register
+$(document).delegate('#button-register', 'click', function() {
+    $.ajax({
+        url: 'index.php?route=extension/register/save',
+        type: 'post',
+        data: $('#stepcheckout-register input[type=\'text\'], #stepcheckout-register input[type=\'date\'], #stepcheckout-register input[type=\'datetime-local\'], #stepcheckout-register input[type=\'time\'], #stepcheckout-register input[type=\'password\'], #stepcheckout-register input[type=\'hidden\'], #stepcheckout-register input[type=\'checkbox\']:checked, #stepcheckout-register input[type=\'radio\']:checked, #stepcheckout-register textarea, #stepcheckout-register select'),
+        dataType: 'json',
+        beforeSend: function() {
+			$('#button-register').button('loading');
+		},
+        success: function(json) {
+            $('.alert, .text-danger').remove();
+            $('.form-group').removeClass('has-error');
+
+            if (json['redirect']) {
+                location = json['redirect'];
+            } else if (json['error']) {
+                $('#button-register').button('reset');
+
+                if (json['error']['warning']) {
+                    $('#stepcheckout-register').prepend('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> ' + json['error']['warning'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                }
+
+				for (i in json['error']) {
+					var element = $('#input-payment-' + i.replace('_', '-'));
+
+					if ($(element).parent().hasClass('input-group')) {
+						$(element).parent().after('<div class="text-danger">' + json['error'][i] + '</div>');
+					} else {
+						$(element).after('<div class="text-danger">' + json['error'][i] + '</div>');
+					}
+				}
+
+				// Highlight any found errors
+				$('.text-danger').parent().addClass('has-error');
+            } else {
+               $.ajax({
+					url: 'index.php?route=extension/step2',
+					dataType: 'html',
+					beforeSend: function() {
+						//$('#button-register').button('loading');
+					},
+					success: function(html){
+						$('#loadcontent').html(html);
+					},
+					error: function(xhr, ajaxOptions, thrownError) {
+						alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+					}
+				});
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+
+// Login
+$(document).delegate('#button-login', 'click', function() {
+    $.ajax({
+        url: 'index.php?route=extension/login/save',
+        type: 'post',
+        data: $('#steplogin :input'),
+        dataType: 'json',
+        beforeSend: function() {
+        	$('#button-login').button('loading');
+		},
+        complete: function() {
+            $('#button-login').button('reset');
+        },
+        success: function(json) {
+            $('.alert, .text-danger').remove();
+            $('.form-group').removeClass('has-error');
+
+            if (json['step2']) {
+               loadsecondstep();
+            } else if (json['error']){
+                $('#steplogin').prepend('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> ' + json['error']['warning'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+				
+				// Highlight any found errors
+				$('input[name=\'email\']').parent().addClass('has-error');
+				$('input[name=\'password\']').parent().addClass('has-error');
+		   }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+
+
+$(document).delegate('#button-shipping-method', 'click', function() {
+    $.ajax({
+        url: 'index.php?route=extension/shipping_method/save',
+        type: 'post',
+        data: $('#shipping_methods input[type=\'radio\']:checked, #shipping_methods input[type=\'checkbox\']:checked, #shipping_methods textarea'),
+        dataType: 'json',
+        beforeSend: function() {
+        	$('#button-shipping-method').button('loading');
+		},
+        success: function(json) {
+            $('.alert, .text-danger').remove();
+
+            if (json['redirect']) {
+                location = json['redirect'];
+            } else if (json['error']) {
+                $('#button-shipping-method').button('reset');
+
+                if (json['error']['warning']) {
+                    $('#secondsteps').prepend('<div class="alert alert-danger">' + json['error']['warning'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                }
+            } else {
+               loadfourthstep();
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+
+//Guest
+$(document).delegate('#button-guest', 'click', function(){
+    $.ajax({
+        url: 'index.php?route=extension/guest/save',
+        type: 'post',
+        data: $('#tab_guest input[type=\'text\'], #tab_guest input[type=\'date\'], #tab_guest input[type=\'datetime-local\'], #tab_guest input[type=\'time\'], #tab_guest input[type=\'checkbox\']:checked, #tab_guest input[type=\'radio\']:checked, #tab_guest input[type=\'hidden\'], #tab_guest textarea, #tab_guest select'),
+        dataType: 'json',
+        beforeSend: function() {
+       		$('#button-guest').button('loading');
+	    },
+        success: function(json) {
+            $('.alert, .text-danger').remove();
+
+            if (json['redirect']) {
+                location = json['redirect'];
+            } else if (json['error']) {
+                $('#button-guest').button('reset');
+
+                if (json['error']['warning']) {
+                    $('#tab_guest').prepend('<div class="alert alert-warning">' + json['error']['warning'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                }
+
+				for (i in json['error']) {
+					var element = $('#tab_guest #input-payment-' + i.replace('_', '-'));
+
+					if ($(element).parent().hasClass('input-group')) {
+						$(element).parent().after('<div class="text-danger">' + json['error'][i] + '</div>');
+					} else {
+						$(element).after('<div class="text-danger">' + json['error'][i] + '</div>');
+					}
+				}
+
+				// Highlight any found errors
+				$('.text-danger').parent().addClass('has-error');
+            } else {
+              loadguestsecondstep();
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+//--></script>
+{{ footer }}

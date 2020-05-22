@@ -1,0 +1,40 @@
+/*Add Css Custom Here*/
+
+/*=====Fixbugs: SO Megamenu ========*/
+.container-megamenu.vertical .vertical-wrapper ul.megamenu > li.last-item a{ border-bottom: none}
+
+@media (min-width: 992px){
+	.container-megamenu.vertical .vertical-wrapper ul.megamenu > li.item-vertical > a img{position: static ; top: 0; transform: translateY(0);}
+	.container-megamenu.vertical .vertical-wrapper ul.megamenu > li.item-vertical > a{ padding: 10px 0; line-height: 23px;}
+	.container-megamenu.vertical .vertical-wrapper ul.megamenu > li > a:after ,
+	.container-megamenu.vertical .vertical-wrapper ul.megamenu .loadmore:before{
+	   display:none;
+	}
+	.container-megamenu.vertical .vertical-wrapper ul.megamenu li.loadmore{padding: 15px 0;}
+}
+
+/*=====Fixbugs: SO Tools ========*/
+#so-groups > a.sticky-backtop{height: 42px;}
+#content #so-groups > a span{text-transform: none;}
+#so-groups .popup-mysearch .form-content .form-box{margin-bottom: 20px;}
+
+
+/*=====Fixbugs: SO Filter Shopby ========*/
+.module.so_filter_wrap .modcontent div.clear_filter{padding: 30px 0 0;}
+.module.so_filter_wrap .modcontent #btn_resetAll{display: block;}
+
+.category-featured .ltabs-wrap .wap-listing-tabs .product-item-container .right-block .item-available{display: none;}
+
+.products-list .product-grid .product-item-container .right-block .addToCart{padding: 14px 10px;}
+
+/*=====Fixbugs: Product Detail ========*/
+div.product-view .content-product-right .title-product h1{text-transform: none;}
+div.mfp-iframe-scaler iframe{ height: 580px;}
+div.product-detail .producttab .tab-content ol{list-style-type:decimal;}
+div.producttab .tabsslider.vertical-tabs{margin-bottom: 30px;}
+.related-horizontal .related-products{margin-bottom: 0;}
+
+/*=====Fixbugs: Home page ========*/
+div.block-policy2 ul li .item-inner .content b{ text-transform: none;}
+div.block-policy2 ul li .item-inner .content span{text-transform: none;}
+div.banner-text .txt-left .inner b{padding-right: 5px;}
