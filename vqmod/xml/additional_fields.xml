@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Additional Fields</id>
+	<version>2X</version>
+	<vqmver required="true">2.6.0</vqmver>
+	<author>Module Points</author>
+	<file name="admin/controller/common/column_left.php">
+		<operation>
+			<search position="before"><![CDATA[if ($this->user->hasPermission('access', 'catalog/recurring'))]]></search>
+			<add><![CDATA[
+			if(VERSION >= '3.0.0.0') {
+				if ($this->user->hasPermission('access', 'additional_field/additional_field')) {
+					$catalog[] = array(
+						'name'	   => $this->language->get('text_additional_field'),
+						'href'     => $this->url->link('additional_field/additional_field', 'user_token=' . $this->session->data['user_token'], true),
+						'children' => array()
+					);
+				}
+			} else {
+				if ($this->user->hasPermission('access', 'additional_field/additional_field')) {
+					$catalog[] = array(
+						'name'	   => $this->language->get('text_additional_field'),
+						'href'     => $this->url->link('additional_field/additional_field', 'token=' . $this->session->data['token'], true),
+						'children' => array()
+					);
+				}
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file name="admin/controller/common/menu.php">
+		<operation>
+			<search position="after"><![CDATA[$this->load->language('common/menu');]]></search>
+			<add><![CDATA[
+			// mps
+			$data['text_additional_field'] = $this->language->get('text_additional_field');
+			$data['additional'] = $this->url->link('additional_field/additional_field', 'token=' . $this->session->data['token'], 'SSL');
+			// mpe
+			]]></add>
+		</operation>
+	</file>
+	<file name="admin/view/template/common/menu.tpl">
+		<operation>
+			<search position="after"><![CDATA[$text_product; ?></a></li>]]></search>
+			<add><![CDATA[
+			<!-- mps -->
+			<li><a href="<?php echo $additional; ?>"><?php echo $text_additional_field; ?></a></li>
+			<!-- mpe -->
+			]]></add>
+		</operation>
+	</file>
+	<file name="admin/language/*/common/menu.php">
+		<operation>
+			<search position="after"><![CDATA[// Text]]></search>
+			<add><![CDATA[
+			$_['text_additional_field']		= 'Product Additional Fields';
+			]]></add>
+		</operation>
+	</file>
+	<file name="admin/language/*/common/column_left.php">
+		<operation>
+			<search position="after"><![CDATA[// Text]]></search>
+			<add><![CDATA[
+			// mps
+			$_['text_additional_field']		= 'Product Additional Fields';
+			]]></add>
+		</operation>
+	</file>
+	<file name="admin/controller/catalog/product.php">
+		<operation>
+			<search position="before"><![CDATA[if (isset($this->error['meta_title']))]]></search>
+			<add><![CDATA[
+			// mps
+			if (isset($this->error['additional_field'])) {
+				$data['error_additional_field'] = $this->error['additional_field'];
+			} else {
+				$data['error_additional_field'] = array();
+			}
+			// mpe
+			]]></add>
+		</operation>
+		<operation>
+			<search position="before"><![CDATA[if (isset($this->request->post['product_discount']))]]></search>
+			<add><![CDATA[
+			// mps
+			$this->load->model('tool/image');
+			$this->load->model('additional_field/additional_field');
+
+			$this->model_additional_field_additional_field->alterTables();
+
+			$data['entry_additional_field'] = $this->language->get('entry_additional_field');
+			$data['entry_text1'] = $this->language->get('entry_text1');
+			$data['entry_image'] = $this->language->get('entry_image');
+			$data['entry_size'] = $this->language->get('entry_size');
+			$data['entry_awidth'] = $this->language->get('entry_awidth');
+			$data['entry_aheight'] = $this->language->get('entry_aheight');
+			$data['tab_additional_field'] = $this->language->get('tab_additional_field');
+
+			if (isset($this->request->post['product_additional_field'])) {
+				$product_additional_fields = $this->request->post['product_additional_field'];
+			} elseif (isset($this->request->get['product_id'])) {
+				$product_additional_fields = $this->model_additional_field_additional_field->getProductAdditionalfields($this->request->get['product_id']);
+			} else {
+				$product_additional_fields = array();
+			}
+
+			$data['product_additional_fields'] = array();
+			foreach ($product_additional_fields as $product_additional_field) {
+				if (is_file(DIR_IMAGE . $product_additional_field['image'])) {
+					$image = $product_additional_field['image'];
+					$thumb = $product_additional_field['image'];
+				} else {
+					$image = '';
+					$thumb = 'no_image.png';
+				}
+
+				$data['product_additional_fields'][] = array(
+					'additional_field_id'            => $product_additional_field['additional_field_id'],
+					'name'                 					 => $product_additional_field['name'],
+					'width'                 					 => $product_additional_field['width'],
+					'height'                 					 => $product_additional_field['height'],
+					'image'                 					=> $image,
+					'thumb'      											=> $this->model_tool_image->resize($thumb, 100, 100),
+					'product_additional_field_description'                 => $product_additional_field['product_additional_field_description']
+				);
+			}
+			// mpe
+			]]></add>
+		</operation>
+		<operation>
+			<search position="before"><![CDATA[if ($this->error && !isset($this->error['warning']))]]></search>
+			<add><![CDATA[
+			// mps
+			if(isset($this->request->post['product_additional_field'])) {
+				foreach ($this->request->post['product_additional_field'] as $row => $product_additional_field) {
+					if(isset($product_additional_field['product_additional_field_description'])) {
+						foreach ($product_additional_field['product_additional_field_description'] as $language_id => $product_additional_field_description) {
+							if (empty($product_additional_field_description['value'])) {
+								$this->error['additional_field'][$row][$language_id] = $this->language->get('error_value');
+							}
+						}
+					}
+				}
+			}
+			// mpe
+			]]></add>
+		</operation>
+	</file>
+	<file name="admin/view/template/catalog/product_form.twig">
+		<operation>
+			<search position="after"><![CDATA[<li><a href="#tab-design" data-toggle="tab">{{ tab_design }}</a></li>]]></search>
+			<add><![CDATA[
+			<!-- mps -->
+            <li><a href="#tab-additional_field" data-toggle="tab">{{ tab_additional_field }}</a></li>
+			<!-- mpe -->
+		]]></add>
+		</operation>
+		<operation>
+			<search position="before"><![CDATA[<div class="tab-pane" id="tab-recurring">]]></search>
+			<add><![CDATA[
+			<!-- mps -->
+			<div class="tab-pane" id="tab-additional_field">
+              <div class="row">
+                <div class="col-sm-3">
+                  <ul class="nav nav-pills nav-stacked ostab" id="additional_field">
+                    {% set additional_field_row = 0 %}
+                    {% for product_additional_field in product_additional_fields %}
+                    <li><a href="#tab-additional_field{{ additional_field_row }}" data-toggle="tab"><i class="fa fa-minus-circle" onclick="$('a[href=\'#tab-additional_field{{ additional_field_row }}\']').parent().remove(); $('#tab-additional_field{{ additional_field_row }}').remove(); $('#additional_field a:first').tab('show');"></i> {{ product_additional_field['name'] }}</a></li>
+                    {% set additional_field_row = additional_field_row + 1 %}
+                    {% endfor %}
+                    <li>
+                      <input type="text" name="additional_field" value="" placeholder="{{ entry_additional_field }}" id="input-additional_field" class="form-control" />
+                    </li>
+                  </ul>
+                </div>
+				<div class="col-sm-9">
+                  <div class="tab-content">
+                    {% set additional_field_row = 0 %}
+                    {% for product_additional_field in product_additional_fields %}
+					<div class="tab-pane" id="tab-additional_field{{ additional_field_row }}">
+						<input type="hidden" name="product_additional_field[{{ additional_field_row }}][additional_field_id]" value="{{ product_additional_field['additional_field_id'] }}" />
+						<input type="hidden" name="product_additional_field[{{ additional_field_row }}][name]" value="{{ product_additional_field['name'] }}" />
+						<div class="form-group">
+							<div class="col-sm-12">
+							{% for language in languages %}
+								<div class="input-group"><span class="input-group-addon"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></span>
+								<input type="text" name="product_additional_field[{{ additional_field_row }}][product_additional_field_description][{{ language['language_id'] }}][value]" value="{{ product_additional_field.product_additional_field_description[language.language_id] ? product_additional_field.product_additional_field_description[language.language_id]['value'] }}" placeholder="{{ entry_text1 }}" class="form-control"/>
+								{% if error_additional_field[additional_field_row][language.language_id] %}
+								<div class="text-danger">{{ error_additional_field[additional_field_row][language.language_id] }}</div>
+								{% endif %}
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_image }}</label>
+						<div class="col-sm-10"><a href="" id="thumb-additional-image{{ additional_field_row }}" data-toggle="image" class="img-thumbnail"><img src="{{ product_additional_field['thumb'] }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a>
+							<input type="hidden" name="product_additional_field[{{ additional_field_row }}][image]" value="{{ product_additional_field['image'] }}" id="input-additional-image{{ additional_field_row }}" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_size }}</label>
+						<div class="col-sm-10">
+						<div class="row">
+						<div class="col-sm-5">
+							<input type="text" name="product_additional_field[{{ additional_field_row }}][width]" value="{{ product_additional_field['width'] }}" id="input-additional-width{{ additional_field_row }}" placeholder="{{ entry_awidth }}" class="form-control" />
+						</div>
+						<div class="col-sm-5">
+							<input type="text" name="product_additional_field[{{ additional_field_row }}][height]" value="{{ product_additional_field['height'] }}" id="input-additional-height{{ additional_field_row }}" placeholder="{{ entry_aheight }}" class="form-control" />
+						</div>
+					</div>
+					</div>
+					</div>
+                    </div>
+                    {% set additional_field_row = additional_field_row + 1 %}
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+			<!-- mpe -->
+		]]></add>
+		</operation>
+		<operation>
+			<search position="before"><![CDATA[{{ footer }}]]></search>
+			<add><![CDATA[
+<!-- mps -->
+<script type="text/javascript"><!---
+$('#additional_field a:first').tab('show');
+var additional_field_row = {{ additional_field_row }};
+
+$('input[name=\'additional_field\']').autocomplete({
+	'source': function(request, response) {
+		$.ajax({
+			url: 'index.php?route=additional_field/additional_field/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				response($.map(json, function(item) {
+					return {
+						label: item['name'],
+						value: item['additional_field_id']
+					}
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+			html  = '<div class="tab-pane" id="tab-additional_field' + additional_field_row + '">';
+			html += '	<input type="hidden" name="product_additional_field[' + additional_field_row + '][additional_field_id]" value="' + item['value'] + '" />';
+			html += '	<input type="hidden" name="product_additional_field[' + additional_field_row + '][name]" value="' + item['label'] + '" />';
+			html += '	<div class="form-group">';
+			html += '	<div class="col-sm-12">';
+			{% for language in languages %}
+			html += '<div class="input-group"><span class="input-group-addon"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></span><input type="text" name="product_additional_field[' + additional_field_row + '][product_additional_field_description][{{ language.language_id }}][value]" value="" placeholder="{{ entry_text1 }}" class="form-control"/></div>';
+				{% endfor %}
+			html += '  </div>';
+			html += '  </div>';
+			html += '<div class="form-group">';
+			html += '<label class="col-sm-2 control-label">{{ entry_image }}</label>';
+			html += '<div class="col-sm-10"><a href="" id="thumb-additional-image'+ additional_field_row +'" data-toggle="image" class="img-thumbnail"><img src="{{ placeholder }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a>';
+			html += '<input type="hidden" name="product_additional_field[' + additional_field_row + '][image]" value="" id="input-additional-image'+ additional_field_row +'" />';
+			html += '</div>';
+			html += '</div>';
+			html += '<div class="form-group">';
+			html += '<label class="col-sm-2 control-label">{{ entry_size }}</label>';
+			html += '	<div class="col-sm-10">';
+			html += '	<div class="row">';
+			html += '<div class="col-sm-5"><input type="text" name="product_additional_field[' + additional_field_row + '][width]" value="" id="input-additional-width' + additional_field_row + '" placeholder="{{ entry_awidth }}" class="form-control" /></div>';
+			html += '<div class="col-sm-5"><input type="text" name="product_additional_field[' + additional_field_row + '][height]" value="" id="input-additional-height' + additional_field_row + '" placeholder="{{ entry_aheight }}" class="form-control" /></div>';
+			html += '</div>';
+			html += '</div>';
+			html += '</div>';
+
+			$('#tab-additional_field .tab-content').append(html);
+
+		$('#additional_field > li:last-child').before('<li><a href="#tab-additional_field' + additional_field_row + '" data-toggle="tab"><i class="fa fa-minus-circle" onclick=" $(\'#additional_field a:first\').tab(\'show\');$(\'a[href=\\\'#tab-additional_field' + additional_field_row + '\\\']\').parent().remove(); $(\'#tab-additional_field' + additional_field_row + '\').remove();"></i> ' + item['label'] + '</li>');
+
+		$('#additional_field a[href=\'#tab-additional_field' + additional_field_row + '\']').tab('show');
+
+		$('[data-toggle=\'tooltip\']').tooltip({
+			container: 'body',
+			html: true
+		});
+
+		additional_field_row++;
+	}
+});
+</script>
+<style>
+.ostab{background: #f0f1f5; border:1px solid #ddd; padding: 10px;}
+.ostab > li{border:1px solid #ddd;background: #e4e6ea;margin-top: 4px;margin-bottom: 4px;}
+.ostab > li.active{border:none;}
+.ostab > li > a{color: #000;padding: 12px;}
+</style>
+<!-- mpe -->
+		]]></add>
+		</operation>
+	</file>
+	<file name="admin/model/catalog/product.php">
+		<operation>
+			<search position="after"><![CDATA[date_modified = NOW() WHERE product_id = '" . (int)$product_id . "'");]]></search>
+			<add><![CDATA[
+			 // mps
+				$this->db->query("DELETE FROM " . DB_PREFIX . "product_additional_field WHERE product_id = '" . (int)$product_id . "'");
+				$this->db->query("DELETE FROM " . DB_PREFIX . "product_additional_field_value WHERE product_id = '" . (int)$product_id . "'");
+
+			if (isset($data['product_additional_field'])) {
+				foreach ($data['product_additional_field'] as $product_additional_field) {
+					$this->db->query("INSERT INTO " . DB_PREFIX . "product_additional_field SET additional_field_id = '" . (int)$product_additional_field['additional_field_id'] . "', product_id = '" . (int)$product_id . "', image = '" . $this->db->escape($product_additional_field['image']) . "', width = '" . $this->db->escape($product_additional_field['width']) . "', height = '" . $this->db->escape($product_additional_field['height']) . "'");
+
+					if (isset($product_additional_field['product_additional_field_description'])) {
+						foreach ($product_additional_field['product_additional_field_description'] as $language_id => $product_additional_field_description) {
+							$this->db->query("INSERT INTO " . DB_PREFIX . "product_additional_field_value SET additional_field_id = '" . (int)$product_additional_field['additional_field_id'] . "', product_id = '" . (int)$product_id . "', language_id = '" . (int)$language_id . "', value = '" . $this->db->escape($product_additional_field_description['value']) . "'");
+						}
+					}
+				}
+			}
+			// mpe
+			]]></add>
+		</operation>
+		<operation>
+			<search position="after"><![CDATA[$product_id = $this->db->getLastId();]]></search>
+			<add><![CDATA[
+			 // mps
+
+		if (isset($data['product_additional_field'])) {
+			foreach ($data['product_additional_field'] as $product_additional_field) {
+
+				$this->db->query("INSERT INTO " . DB_PREFIX . "product_additional_field SET additional_field_id = '" . (int)$product_additional_field['additional_field_id'] . "', product_id = '" . (int)$product_id . "', image = '" . $this->db->escape($product_additional_field['image']) . "', width = '" . $this->db->escape($product_additional_field['width']) . "', height = '" . $this->db->escape($product_additional_field['height']) . "'");
+
+				if (isset($product_additional_field['product_additional_field_description'])) {
+					foreach ($product_additional_field['product_additional_field_description'] as $language_id => $product_additional_field_description) {
+						$this->db->query("INSERT INTO " . DB_PREFIX . "product_additional_field_value SET additional_field_id = '" . (int)$product_additional_field['additional_field_id'] . "', product_id = '" . (int)$product_id . "', language_id = '" . (int)$language_id . "', value = '" . $this->db->escape($product_additional_field_description['value']) . "'");
+					}
+				}
+			}
+		}
+		// mpe
+			]]></add>
+		</operation>
+		<operation>
+			<search position="after"><![CDATA[coupon_product WHERE product_id = '" . (int)$product_id . "'");]]></search>
+			<add><![CDATA[
+			 // mps
+					$this->db->query("DELETE FROM " . DB_PREFIX . "product_additional_field WHERE product_id = '" . (int)$product_id . "'");
+					$this->db->query("DELETE FROM " . DB_PREFIX . "product_additional_field_value WHERE product_id = '" . (int)$product_id . "'");
+			// mpe
+			]]></add>
+		</operation>+
+		<operation>
+			<search position="after"><![CDATA[$data['product_description'] = $this->getProductDescriptions($product_id);]]></search>
+			<add><![CDATA[
+			// mps
+			$this->load->model('additional_field/additional_field');
+			$data['product_additional_field'] = $this->model_additional_field_additional_field->getProductAdditionalfields($product_id);
+			// mpe
+			]]></add>
+		</operation>
+	</file>
+	<file name="admin/language/*/catalog/product.php">
+		<operation>
+			<search position="after"><![CDATA[// Heading]]></search>
+			<add><![CDATA[
+// mps
+$_['entry_additional_field']        = 'Additional Fields (autocomplete)';
+$_['entry_size']        						= 'Image Size';
+$_['entry_aheight']        					= 'Height';
+$_['entry_awidth']        					= 'Width';
+$_['entry_text1']         					= 'Enter a value here...';
+$_['entry_image']         					= 'Image';
+$_['error_value']         				 	= 'Value requried!';
+$_['tab_additional_field']          = 'Additional Fields';
+			]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/product/product.php">
+		<operation>
+			<search position="after"><![CDATA[$this->load->model('tool/image');]]></search>
+			<add><![CDATA[
+			 // mps
+				$this->document->addStyle('catalog/view/theme/default/stylesheet/additional_fields.css');
+				$this->load->model('additional_fields/additional_fields');
+
+				$this->model_additional_fields_additional_fields->alterTables();
+
+				$data['additional_fields'] = $this->model_additional_fields_additional_fields->getProductAdditionalFields($this->request->get['product_id']);
+
+			// mpe
+			]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/*/template/product/product.twig">
+		<operation>
+			<search position="after"><![CDATA[{{ stock }}</li>]]></search>
+			<add><![CDATA[
+					<!-- mps -->
+					{% if additional_fields|length %}
+	 					{% for additional_field in additional_fields %}
+							{% if additional_field.image is empty %}
+								<li class="additional_field_text">{{ additional_field.name }}: {{ additional_field.value }}</li>
+							{% endif %}
+						{% endfor %}
+						{% for additional_field in additional_fields %}
+							{% if additional_field.image|length %}
+							<li class="additional_field clearfix">
+								<span class="image"><img class="img-responsive" src="{{ additional_field.image }}" alt="{{ additional_field.name }}" /></span>
+								<span class="text">
+									<h4>{{ additional_field.name }}</h4>
+									<p>{{ additional_field.value }}</p>
+								</span>
+							</li>
+							{% endif %}
+						{% endfor %}
+					{% endif %}
+					<!-- mpe -->
+			]]></add>
+		</operation>
+	</file>
+</modification>

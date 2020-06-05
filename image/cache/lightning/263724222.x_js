@@ -1,0 +1,1 @@
+try{$(document).ready(function(){});}catch(e){console.log('Error at https://btkmart.skyesprojects.net/catalog/view/theme/so-mobile/js/so.custom.js: '+e.message);}

@@ -1,0 +1,13 @@
+User-agent: *
+# === Lightning code start
+Disallow: /*li_op=
+Disallow: /*tag=
+Disallow: /*search=
+Disallow: /*manufacturer_id=
+Disallow: /*sort=
+Disallow: /*order=
+Disallow: /*limit=
+Disallow: /*filter_name=
+Disallow: /*filter_sub_category=
+Disallow: /*filter_description=
+# === Lightning code end

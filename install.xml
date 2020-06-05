@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+  <name>Megahubs Widget</name>
+  <code>megahubs widget</code>
+  <version>1x</version>
+  <author>Deta Teguh Satrio</author>
+  <link>https://detatsatrio.github.io</link>
+  <file path="catalog/view/theme/*/js/common.js">
+	<operation>
+      <search><![CDATA[
+  		$(document).ready(function() {
+	]]></search>
+      <add position="after"><![CDATA[
+MP('openWidget');
+		]]></add>
+    </operation>
+  </file>
+  <file path="catalog/view/theme/*/template/common/search.twig">
+	<operation>
+      <search><![CDATA[
+  		<div id="search" class="input-group">
+	]]></search>
+      <add position="after"><![CDATA[
+<a href="#" id="mp-hook"><img src="https://media.freepik.com/accounts/img/badges/favorites_gold.svg"></a>
+		]]></add>
+    </operation>
+  </file>
+  <file path="catalog/view/theme/*/template/common/header.twig">
+	<operation>
+      <search><![CDATA[
+  		<div id="socialLogin"></div>
+	]]></search>
+      <add position="before"><![CDATA[
+<a href="#" id="mp-hook"><img src="https://media.freepik.com/accounts/img/badges/favorites_gold.svg"></a>
+		]]></add>
+    </operation>
+  </file>
+  <file path="catalog/view/theme/*/template/common/footer.twig">
+    <operation>
+      <search><![CDATA[
+  </body>
+	]]></search>
+      <add position="before"><![CDATA[
+<script id="mp-snippet">
+!function(a,b,c,d,e,f,g){a.MegahubsObject=e,a[e]=a[e]||function(){(a[e]._=a[e]._||[]).push(arguments)},
+a[e].$={start:1*new Date},f=b.createElement(c),g=b.getElementById("mp-snippet"),f.async=1,f.id="mp-widget",
+f.src=d,g.parentNode.insertBefore(f,g)}(window,document,"script","https://d1npkqd2auelox.cloudfront.net/dist/mhsdk.js","MP");
+
+MP('init', 'd3a7285a-83c7-57a9-aa58-92a562d52d09',{
+    LAYOUT_THEME: 'white',
+    COLOR_THEME: 'blue',
+    PROVIDER: 'all',
+    PROVIDER_GAMES: 'all',
+    PROVIDER_TAGIHAN: 'all',
+    PAYMENT: 'all',
+    SHOW_NAVBAR: true,
+    TITLE_NAVBAR: 'BTK Mart PPOB',
+    ENABLE_MODULE_PULSA: true,
+    ENABLE_MODULE_LISTRIK: true,
+    ENABLE_MODULE_GAMES: true,
+    ENABLE_MODULE_TAGIHAN: true,
+    FIRST_MODULE_TAB_INDEX: 1,
+    LANG: 'id-ID'
+});
+</script>
+		]]></add>
+    </operation>
+  </file>
+</modification>

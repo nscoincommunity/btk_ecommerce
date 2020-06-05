@@ -1,0 +1,1 @@
+try{$(document).ready(function(){});}catch(e){console.log('Error at https://www.btkmart.co.id/catalog/view/theme/so-bestshop/js/custom.js: '+e.message);}

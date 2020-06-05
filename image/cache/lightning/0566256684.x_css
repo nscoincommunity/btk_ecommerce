@@ -1,0 +1,6 @@
+.additional_field{border:1px
+solid #ddd;border-radius:4px;margin:10px
+0 15px}.additional_field
+.image{display:inline-block;vertical-align:top;padding-left:5px}.additional_field
+.text{display:block;padding-left:5px}.additional_field .text
+b{text-transform:capitalize}
